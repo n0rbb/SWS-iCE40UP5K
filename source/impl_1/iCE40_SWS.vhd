@@ -1,0 +1,148 @@
+----------------------------------------------------------------------------------
+-- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
+-- 
+-- Create Date: 21.04.2025 11:49:33
+-- Design Name: SPIN-WAVE SENSOR SPARTAN MAP
+-- Module Name: Spartan_SWS - SWS_Behavior
+-- Project Name: SPIN-WAVE SENSOR - SIGNAL ACQUISITION UNIT
+-- Target Devices: iCE40UP
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+
+entity iCE40_SWS is
+    port ( 
+        -- FPGA external oscillator input
+        --CLK_SOURCE        : in std_logic;
+
+        -- User button -- Reset
+        BTN               : in std_logic;
+
+        -- Communications inteface -RS232
+        UART_RX           : in std_logic;
+        UART_TX           : out std_logic;
+
+        -- LEDs for testing and debugging
+        --LED               : out std_logic_vector(2 downto 0);
+        LED				 : out std_logic;
+        -- TEST FREQUENCY INPUT
+        FQ_IN                : in std_logic
+
+    );
+end iCE40_SWS;
+
+architecture SWS_Behavior of iCE40_SWS is
+
+    -- Component declaration
+	
+	-- Lattice provided primitive for the internal oscillator
+	component HSOSC is
+		generic(
+			CLKHF_DIV : string := "0b10" -- This should make 12 MHz. 
+		);
+		port(
+			CLKHFPU : in std_logic;
+			CLKHFEN : in std_logic;
+			CLKHF 	: out std_logic
+		);
+	end component;
+	
+
+    component SWS_top is
+        port(
+            CLK_PORT   : in std_logic;
+            RESET      : in std_logic;
+        
+            RS232_RX    : in std_logic;
+            RS232_TX    : out std_logic;
+        
+            --LED_PORT    : out std_logic_vector(2 downto 0);
+            
+            INPUT_FRQ   : in std_logic
+    
+        );
+
+    end component;
+
+
+    -- Device signals declaration
+    --signal clk         : std_logic;
+    signal clk_fpga    : std_logic;
+
+    signal reset       : std_logic;
+
+    signal rd, td      : std_logic;
+
+   -- signal led_out     : std_logic_vector(2 downto 0); -- Keep 1 bit per LED
+    
+    signal fq_in_sg    : std_logic;
+
+	signal test_led : std_logic_vector(15 downto 0);
+	
+
+    begin
+
+        --Component port mapping
+		
+		OSCILLATOR : HSOSC
+			generic map(
+				CLKHF_DIV => "0b10" --48/4 = 12 MHz 
+			)
+			port map(
+				CLKHFPU => reset,
+				CLKHFEN => reset, 
+				CLKHF => clk_fpga -- Using internal oscillator
+			);
+        
+        UUT_SWS : SWS_top 
+            port map(
+                CLK_PORT    => clk_fpga,
+                RESET       => reset,
+            
+                RS232_RX    => rd,
+                RS232_TX    => td,
+            
+               -- LED_PORT    => led_out,
+                
+                INPUT_FRQ   => fq_in_sg
+            );
+    
+        --Signal assignation
+       -- clk_fpga    <= CLK_SOURCE; -- Using external clock
+        reset       <= not(BTN); --Reset active low
+    
+        rd          <= UART_RX;
+        UART_TX     <= td;
+    
+       -- LED         <= led_out;
+        
+        fq_in_sg    <= FQ_IN;
+		
+		p_Test_LED : process(reset, clk_fpga)
+		begin
+			if reset = '0' then
+				test_led <= (others => '0');
+			elsif clk_fpga'event and clk_fpga = '1' then
+				test_led <= std_logic_vector(unsigned(test_led) + 1);
+			end if;
+		
+		end process p_Test_LED;
+		
+		LED <= not(test_led(13));
+
+    end SWS_Behavior;

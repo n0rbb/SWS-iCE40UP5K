@@ -1,0 +1,6 @@
+ldc_set_location -site {46} [get_ports BTN]
+ldc_set_location -site {9} [get_ports UART_RX]
+ldc_set_location -site {10} [get_ports UART_TX]
+ldc_set_location -site {20} [get_ports FQ_IN]
+ldc_set_location -site {44} [get_ports CLK_SOURCE]
+ldc_set_location -site {39} [get_ports LED]

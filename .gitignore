@@ -1,0 +1,20 @@
+#Ignore everything
+/*
+!.gitignore
+
+
+#IPs
+!FQCLK/
+FQCLK/*
+!FQCLK/rtl/
+FQCLK/rtl/*
+!FQCLK/rtl/FQCLK.v
+
+
+#source
+!source/
+!source/impl_1
+
+source/impl_1/iCE40_SWS.vhd.bak
+
+
