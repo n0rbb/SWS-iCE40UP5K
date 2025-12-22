@@ -37,18 +37,18 @@ architecture Counter_Behavior of FRC is
     signal count_high, count_low : std_logic_vector(15 downto 0);
 	--signal count_cross_r, count_cross_r2 : std_logic_vector(31 downto 0);
     signal count_clear : std_logic;
-    signal count_enable : std_logic; --SeÃ±ales de control para la cuenta
+    signal count_enable : std_logic; --Señales de control para la cuenta
     signal elapsed_periods : unsigned(15 downto 0);
     
 	constant target : unsigned(15 downto 0) := to_unsigned(100, 16);
     
 	signal bytecounter_sv : unsigned(1 downto 0);
 	
-	-- Doble ff para la sincronización del cruce de dominios de reloj (12 MHz -> 120 MHz)
+	-- Doble ff para la sincronizaciÃ³n del cruce de dominios de reloj (12 MHz -> 120 MHz)
 	signal count_clear_sync_r1, count_clear_sync_r2 : std_logic;
 	signal count_enable_sync_r1, count_enable_sync_r2 : std_logic;
 	
-	-- Doble ff y flags secuenciales para sincronización del cruce de dominios de reloj (120MHz -> 12 MHz)
+	-- Doble ff y flags secuenciales para sincronizaciÃ³n del cruce de dominios de reloj (120MHz -> 12 MHz)
 	signal count_r, count_sync_r : std_logic_vector(31 downto 0);
 	signal datasync_ready, datasync_ack : std_logic;
         
@@ -146,7 +146,7 @@ architecture Counter_Behavior of FRC is
                         bytecounter_sv <= "00";
                     when Done =>
 						if datasync_ready = '1' then
-							count_sync_r <= count_r; -- Puedo hacer aquí el paso con el handshake
+							count_sync_r <= count_r; -- Puedo hacer aquÃ­ el paso con el handshake
 							datasync_ack <= '1';
 							datasync_ready <= '0';
 						end if;
