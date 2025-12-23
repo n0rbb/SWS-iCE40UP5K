@@ -1,7 +1,7 @@
 
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÍNGUEZ
 -- 
 -- Create Date: 21.04.2025 12:23:02
 -- Design Name: SPIN-WAVE SENSOR SPARTAN TOP
@@ -90,6 +90,10 @@ architecture SWS_top_Behavior of SWS_top is
             SEND_COMM 	: in std_logic;
             DMA_RQ 		: out std_logic;
             READY 		: out std_logic;	
+			
+			COUNT_RDY	: in std_logic;
+			COUNT_OUT	: in std_logic_vector(7 downto 0);
+			COUNT_READ	: out std_logic;
             
             INTERRUPT_ACK : in std_logic;
             DMA_INTERRUPT : out std_logic;
@@ -159,8 +163,6 @@ architecture SWS_top_Behavior of SWS_top is
     
             COUNTER_START : out std_logic;
             COUNTER_BUSY  : in std_logic;
-            COUNTER_RQ    : in std_logic;
-            COUNTER_ACK   : out std_logic;
 
             ALU_OP      : out alu_op_t;
             INDEX_REG   : in std_logic_vector(7 downto 0);
@@ -174,39 +176,28 @@ architecture SWS_top_Behavior of SWS_top is
 	
 	
 	--Frequency counters
-    component FQCLK is
-		port(
-			ref_clk_i: in std_logic;
-			rst_n_i: in std_logic;
-			outcore_o: out std_logic;
-			outglobal_o: out std_logic
-		);
-	end component;
-	
+    --component FQCLK is
+		--port(
+			--ref_clk_i: in std_logic;
+			--rst_n_i: in std_logic;
+			--outcore_o: out std_logic;
+			--outglobal_o: out std_logic
+		--);
+	--end component;
+
     
-    --component MCMM_Counters is 
-    --    port(
-            --reset : in std_logic;
-            --clk_in1 : in std_logic;
-            --FAST_CLK_OUT : out std_logic;
-            --locked : out std_logic
-        --);
-    --end component;
-    
-    component FRC is 
+    component FQC_top is 
         port ( 
             RESET : in std_logic;
             CLK_PORT : in std_logic;
-            FAST_CLK_PORT : in std_logic;
+            --FAST_CLK_PORT : in std_logic;
             INPUT : in std_logic;
             START : in std_logic;
-            FRC_ACK : in std_logic;
-            FRC_RQ : out std_logic;
             BUSY_FLAG : out std_logic;
-            -- RAM task
-            ADDRESS : out std_logic_vector(7 downto 0);
-            DATABUS : inout std_logic_vector(7 downto 0);
-            WRITE_EN : out std_logic
+			
+			COUNT_RDY : out std_logic;
+			COUNT_READ : in std_logic;
+			COUNT_OUT : out std_logic_vector(7 downto 0)
         );
     end component;
     
@@ -220,9 +211,9 @@ architecture SWS_top_Behavior of SWS_top is
    -- signal led_status   : std_logic_vector(2 downto 0);
     
     -- PLL
-    signal init         : std_logic; --Neg reset, for PLL
-    signal clk_120_mhz_core : std_logic;
-    signal clk_120_mhz  : std_logic;
+    --signal init         : std_logic; --Neg reset, for PLL
+    --signal clk_120_mhz_core : std_logic;
+    --signal clk_120_mhz  : std_logic;
 
     -- RS232 <> DMA
     signal tx_data      : std_logic_vector(7 downto 0);
@@ -265,12 +256,11 @@ architecture SWS_top_Behavior of SWS_top is
     -- FRC <> CPU
     signal ctr_start    : std_logic;
     signal ctr_busy     : std_logic;
-    signal ctr_rq       : std_logic;
-    signal ctr_ack      : std_logic;
-   
-    -- FRC <> RAM
-    signal write_en_frc : std_logic;
-    signal address_frc  : std_logic_vector(7 downto 0);
+	
+	-- FRC <> DMA
+	signal count_ready 	: std_logic;
+	signal count_out	: std_logic_vector(7 downto 0);
+	signal count_read	: std_logic;
     
     begin
 
@@ -320,6 +310,10 @@ architecture SWS_top_Behavior of SWS_top is
                 SEND_COMM 	=> send_comm,
                 DMA_RQ 		=> dma_rq,
                 READY 		=> ready,
+				
+				COUNT_RDY 	=> count_ready,
+				COUNT_OUT	=> count_out,
+				COUNT_READ	=> count_read,
                 
                 DMA_INTERRUPT => dma_interrupt,
                 INTERRUPT_ACK => interrupt_ack,
@@ -385,8 +379,6 @@ architecture SWS_top_Behavior of SWS_top is
                 
                 COUNTER_START => ctr_start,
                 COUNTER_BUSY => ctr_busy,
-                COUNTER_RQ  => ctr_rq,
-                COUNTER_ACK => ctr_ack,
 
                 ALU_OP      => uoperation,
                 INDEX_REG   => index_reg,
@@ -397,13 +389,13 @@ architecture SWS_top_Behavior of SWS_top is
 
             );
         
-		  FC_PLL : FQCLK 
-		  port map(
-				ref_clk_i	   => CLK_PORT,
-				rst_n_i		   => RESET,
-				outcore_o      => clk_120_mhz_core,
-				outglobal_o    => clk_120_mhz
-		);
+		--FC_PLL : FQCLK 
+			--port map(
+				--ref_clk_i	   => CLK_PORT,
+				--rst_n_i		   => RESET,
+				--outcore_o      => clk_120_mhz_core,
+				--outglobal_o    => clk_120_mhz
+			--);
         --FC_MCMM : MCMM_Counters 
             --port map(
                 --reset       => init,
@@ -412,38 +404,31 @@ architecture SWS_top_Behavior of SWS_top is
                 --locked      => locked
             --);
             
-        FC0_CP : FRC
+        FC0_CP : FQC_top
             port map(
                 RESET       => RESET,
                 CLK_PORT    => CLK_PORT,
-                FAST_CLK_PORT => clk_120_mhz,
+                --FAST_CLK_PORT => clk_120_mhz,
                 INPUT       => INPUT_FRQ,
                 START       => ctr_start,
-                FRC_ACK     => ctr_ack,
-                FRC_RQ      => ctr_rq,
                 BUSY_FLAG   => ctr_busy,
                 
-                ADDRESS     => address_frc,
-                WRITE_EN    => write_en_frc,
-                DATABUS     => databus
-            
+				COUNT_READ 	=> count_read,
+				COUNT_RDY	=> count_ready,
+				COUNT_OUT	=> count_out
             );
             
         -- Signal assignation
-        init <= not RESET;
+        --init <= not RESET;
         --LED_port <= led_status;
         
         -- Processes
-        RAM_MUX : process(dma_ack, ctr_ack, send_comm, address_frc, write_en_frc, address_dma, oe_dma, write_en_dma, address_cpu, oe_cpu, write_en_cpu)
+        RAM_MUX : process(dma_ack, send_comm, address_dma, oe_dma, write_en_dma, address_cpu, oe_cpu, write_en_cpu)
             begin
                 if dma_ack = '1' or send_comm = '1' then
                     address     <= address_dma;
                     oe          <= oe_dma;
                     write_en    <= write_en_dma;
-                elsif ctr_ack = '1' then
-                    address     <= address_frc;
-                    write_en    <= write_en_frc;
-                    oe          <= oe_cpu; -- Para no tener latch pero frc nunca lee ram
                 else
                     address     <= address_cpu;
                     oe          <= oe_cpu;

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS CENTRAL PROCESSING UNIT
@@ -49,15 +49,10 @@ entity CPU is
         
         COUNTER_START : out std_logic;
         COUNTER_BUSY  : in std_logic;
-        COUNTER_RQ    : in std_logic;
-        COUNTER_ACK   : out std_logic;
-        --COUNTBUS    : in std_logic_vector(31 downto 0);
-        --COUNTER_SAVE_ACK : out std_logic;
-        --COUNTER_DONE_FLAG : in std_logic;
         
         DATABUS     : inout std_logic_vector(7 downto 0);
         
-        -- Interrupciones
+        -- Interrupciones DMA
         DMA_INTERRUPT : in std_logic;
         INTERRUPT_ACK : out std_logic
     );
@@ -70,13 +65,13 @@ architecture CPU_Behavior of CPU is
 	signal pc_reg, ins_reg, tmp_reg: std_logic_vector(7 downto 0); -- CPU registers
 	signal pc, ins, tmp: std_logic_vector(7 downto 0); -- Combinational signals
 	signal pc_ctx_reg, ins_ctx_reg, tmp_ctx_reg : std_logic_vector(7 downto 0); --Registros para contexto de la CPU
-	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã‚Â³n a interrupciones
+	signal int_ack_flag : std_logic; -- Flag de atención a interrupciones
 
 
     begin
         
         -- Processes
-        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST, COUNTER_RQ)
+        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST)
             begin
                 -- Default combinational values
                 -- Program counter
@@ -94,7 +89,6 @@ architecture CPU_Behavior of CPU is
                 ALU_OP      <= nop;
                 
                 COUNTER_START <= '0';
-                COUNTER_ACK <= '0';
 
                 ins <= ins_reg;
                 pc  <= pc_reg;
@@ -110,9 +104,6 @@ architecture CPU_Behavior of CPU is
                             
                         elsif DMA_INTERRUPT = '1' then
                             next_state <= Interrupt;
-                        
-                        elsif COUNTER_RQ = '1' then
-                            next_state <= RdCounter;
 
                         else
                             next_state <= Fetch;
@@ -335,14 +326,7 @@ architecture CPU_Behavior of CPU is
                     when RunCounter =>
                         COUNTER_START <= '1';
                         next_state <= Idle;
-                        
-                    when RdCounter =>
-                        COUNTER_ACK <= '1';
-                        if COUNTER_RQ = '0' then
-                            next_state <= Idle;
-                        else
-                            next_state <= RdCounter;
-                        end if;    
+                       
                     when others =>
 
                 end case;

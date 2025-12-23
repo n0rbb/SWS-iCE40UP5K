@@ -19,7 +19,7 @@ architecture Testbench of tb_iCE40_SWS is
             UART_TX           : out std_logic;
     
             -- LEDs for testing and debugging
-            LED               : out std_logic_vector(2 downto 0);
+            --LED               : out std_logic_vector(2 downto 0);
             
             -- Frequency input
             FQ_IN             : in std_logic
@@ -31,7 +31,7 @@ architecture Testbench of tb_iCE40_SWS is
     signal reset        : std_logic;
     signal btn_signal   : std_logic;
 	--signal btn_signal   : std_logic_vector(1 downto 0);
-    signal led_signal   : std_logic_vector(2 downto 0);
+    --signal led_signal   : std_logic_vector(2 downto 0);
 
     -- UART
     signal td           : std_logic;
@@ -40,7 +40,7 @@ architecture Testbench of tb_iCE40_SWS is
     signal fq_mock      : std_logic;
 
     constant clkperiod  : time := 83.33 ns; --12 MHz clock frequency
-    constant signalperiod : time := 50 ns; --20 MHz mock signal frequency
+    constant signalperiod : time := 500 ns; --2 MHz mock signal frequency
 
     begin
         -- Component mapping
@@ -52,7 +52,7 @@ architecture Testbench of tb_iCE40_SWS is
                 UART_RX         => rd,
                 UART_TX         => td,
 
-                LED             => led_signal,
+                --LED             => led_signal,
                 FQ_IN           => fq_mock
             ); 
            
@@ -131,7 +131,7 @@ architecture Testbench of tb_iCE40_SWS is
 
         -- Signal-port assignation
         btn_signal <= not(reset);
-        led_signal <= LED;
+        --led_signal <= LED;
         --td <= UART_TX;
         --UART_RX <= rd;
 end Testbench;
