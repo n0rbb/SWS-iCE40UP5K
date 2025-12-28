@@ -62,7 +62,7 @@ begin
             end if;
 		end process CTR_CDC;
 
-		CTR_FSM : process(current_state, count_enable_sync_r2, count_ack_sync_r2, elapsed_periods)
+		CTR_FSM : process(current_state, count_enable_sync_r2, count_ack_sync_r2, elapsed_periods, count_r)
 		begin
 			case current_state is 
 				when Idle =>

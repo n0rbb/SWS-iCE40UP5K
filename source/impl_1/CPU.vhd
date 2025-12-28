@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS CENTRAL PROCESSING UNIT
@@ -36,6 +36,7 @@ entity CPU is
         RAM_ADDR    : out std_logic_vector(7 downto 0);
         RAM_WRITE   : out std_logic;
         RAM_OE      : out std_logic;
+		RAM_READ_RDY : in std_logic;
 
         DMA_RQ      : in std_logic;
         DMA_READY   : in std_logic;
@@ -65,13 +66,13 @@ architecture CPU_Behavior of CPU is
 	signal pc_reg, ins_reg, tmp_reg: std_logic_vector(7 downto 0); -- CPU registers
 	signal pc, ins, tmp: std_logic_vector(7 downto 0); -- Combinational signals
 	signal pc_ctx_reg, ins_ctx_reg, tmp_ctx_reg : std_logic_vector(7 downto 0); --Registros para contexto de la CPU
-	signal int_ack_flag : std_logic; -- Flag de atención a interrupciones
+	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÂ³n a interrupciones
 
 
     begin
         
         -- Processes
-        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST)
+        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST, RAM_READ_RDY)
             begin
                 -- Default combinational values
                 -- Program counter
@@ -150,7 +151,7 @@ architecture CPU_Behavior of CPU is
                                 end if;
                             
                             when others =>
-                            --    next_state <= Decode;
+                                -- next_state <= Decode;
                             
                         end case;
                     
@@ -229,43 +230,59 @@ architecture CPU_Behavior of CPU is
                                         when SRC_MEM & DST_A =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_lda;
+										  if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_lda;
+										  end if;
                                         
                                         when SRC_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldb;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldb;
+										  end if;
                                         
                                         when SRC_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldid;
+										  end if;
 
                                         when SRC_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldacc;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldacc;
+										  end if;
 
                                         -- External load: Indexed RAM to reg
                                         when SRC_IDX_MEM & DST_A =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_lda;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_lda;
+										  end if;
                                         
                                         when SRC_IDX_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldb;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldb;
+										  end if;
                                         
                                         when SRC_IDX_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldid;
+										  end if;
 
                                         when SRC_IDX_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldacc;
+										  end if;
                                        
                                         when others =>
 
@@ -287,7 +304,12 @@ architecture CPU_Behavior of CPU is
                                     RAM_WRITE <= '1';
 
                                 end if;
-                                next_state <= Idle;
+								
+								if ins_reg(4) = '1' and RAM_READ_RDY = '0' then
+									next_state <= Execute; --Mantengo la ejecuciÃ³n un ciclo extra si la operaciÃ³n es de lectura para que la ALU pille el databus
+								else
+									next_state <= Idle;
+								end if;
 
                         when TYPE_4 => --Peripheral operations and extras (delay)
                             case ins_reg(5 downto 4) is

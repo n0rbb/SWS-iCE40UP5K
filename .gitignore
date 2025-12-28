@@ -10,6 +10,11 @@ FQCLK/*
 FQCLK/rtl/*
 !FQCLK/rtl/FQCLK.v
 
+!RAM/
+RAM/*
+!RAM/rtl/
+RAM/rtl/*
+!RAM/rtl/RAM.v
 
 #source
 !source/

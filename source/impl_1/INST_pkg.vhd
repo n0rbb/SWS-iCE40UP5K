@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÂNGUEZ
 -- 
 -- Create Date: 25.04.2025 14:48:45
 -- Design Name: SWS_INSTRUCTION CONSTANTS PACKAGE
@@ -42,7 +42,7 @@ package INST_pkg is
     -- TYPE 1 INSTRUCTIONS
     constant TYPE_1         : std_logic_vector(1 downto 0)  := "00";
 	
-	constant ALU_NOP			: std_logic_vector(5 downto 0)  := "000000";
+	constant ALU_NOP		: std_logic_vector(5 downto 0)  := "000000";
     constant ALU_CMPE       : std_logic_vector(5 downto 0)  := "000001";
     constant ALU_CMPG       : std_logic_vector(5 downto 0)  := "000010";
     constant ALU_CMPL       : std_logic_vector(5 downto 0)  := "000011";
