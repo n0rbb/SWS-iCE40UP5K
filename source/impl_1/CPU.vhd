@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS CENTRAL PROCESSING UNIT
@@ -55,7 +55,10 @@ entity CPU is
         
         -- Interrupciones DMA
         DMA_INTERRUPT : in std_logic;
-        INTERRUPT_ACK : out std_logic
+        INTERRUPT_ACK : out std_logic;
+		
+		-- Config DMA
+		DMA_WR_EN 	: out std_logic
     );
 end CPU;
 
@@ -66,7 +69,7 @@ architecture CPU_Behavior of CPU is
 	signal pc_reg, ins_reg, tmp_reg: std_logic_vector(7 downto 0); -- CPU registers
 	signal pc, ins, tmp: std_logic_vector(7 downto 0); -- Combinational signals
 	signal pc_ctx_reg, ins_ctx_reg, tmp_ctx_reg : std_logic_vector(7 downto 0); --Registros para contexto de la CPU
-	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÂ³n a interrupciones
+	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã‚Â³n a interrupciones
 
 
     begin
@@ -86,6 +89,7 @@ architecture CPU_Behavior of CPU is
                 
                 DMA_ACK     <= '0';
                 DMA_SEND    <= '0';
+				DMA_WR_EN	<= '0';
 
                 ALU_OP      <= nop;
                 
@@ -225,6 +229,10 @@ architecture CPU_Behavior of CPU is
                                         when SRC_CONST & DST_ACC =>
                                             DATABUS <= tmp_reg;
                                             ALU_OP  <= op_ldacc;
+										
+										when SRC_CONST & DST_DMA =>
+											DATABUS <= tmp_reg;
+											DMA_WR_EN <= '1';
 
                                         -- External load: RAM to reg
                                         when SRC_MEM & DST_A =>
@@ -232,28 +240,35 @@ architecture CPU_Behavior of CPU is
                                             RAM_OE      <= '0';
 										  if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_lda;
-										  end if;
+											end if;
                                         
                                         when SRC_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldb;
-										  end if;
+											end if;
                                         
                                         when SRC_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldid;
-										  end if;
+											end if;
 
                                         when SRC_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldacc;
-										  end if;
+											end if;
+										  
+										when SRC_MEM & DST_DMA =>
+											RAM_ADDR 	<= tmp_reg;
+											RAM_OE		<= '0';
+											if RAM_READ_RDY = '1' then
+												DMA_WR_EN <= '1';
+											end if;
 
                                         -- External load: Indexed RAM to reg
                                         when SRC_IDX_MEM & DST_A =>
@@ -261,29 +276,36 @@ architecture CPU_Behavior of CPU is
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_lda;
-										  end if;
+											end if;
                                         
                                         when SRC_IDX_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldb;
-										  end if;
+											end if;
                                         
                                         when SRC_IDX_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldid;
-										  end if;
+											end if;
 
                                         when SRC_IDX_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
                                             if RAM_READ_RDY = '1' then
 												ALU_OP      <= op_ldacc;
-										  end if;
-                                       
+											end if;
+										
+										when SRC_IDX_MEM & DST_DMA => 
+											RAM_ADDR 	<= tmp_reg + INDEX_REG;
+											RAM_OE 		<= '0';
+											if RAM_READ_RDY = '1' then
+												DMA_WR_EN <= '1';
+											end if;
+										
                                         when others =>
 
                                     end case;
@@ -306,7 +328,7 @@ architecture CPU_Behavior of CPU is
                                 end if;
 								
 								if ins_reg(4) = '1' and RAM_READ_RDY = '0' then
-									next_state <= Execute; --Mantengo la ejecuciÃ³n un ciclo extra si la operaciÃ³n es de lectura para que la ALU pille el databus
+									next_state <= Execute; --Mantengo la ejecuciÃƒÂ³n un ciclo extra si la operaciÃƒÂ³n es de lectura para que la ALU pille el databus
 								else
 									next_state <= Idle;
 								end if;

@@ -1,7 +1,7 @@
 
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 12:23:02
 -- Design Name: SPIN-WAVE SENSOR SPARTAN TOP
@@ -98,7 +98,8 @@ architecture SWS_top_Behavior of SWS_top is
             
             INTERRUPT_ACK : in std_logic;
             DMA_INTERRUPT : out std_logic;
-
+			
+			WRITE_CFG_EN  : in std_logic;
             DATABUS 	: inout std_logic_vector(7 downto 0)
         );
     end component;
@@ -186,6 +187,7 @@ architecture SWS_top_Behavior of SWS_top is
             FLAG_Z      : in std_logic;
             FLAG_E      : in std_logic;
 
+			DMA_WR_EN   : out std_logic;
             DATABUS     : inout std_logic_vector(7 downto 0)
             
         );
@@ -269,6 +271,7 @@ architecture SWS_top_Behavior of SWS_top is
     signal ready        : std_logic;
     signal dma_interrupt : std_logic;
     signal interrupt_ack : std_logic;
+	signal dma_write_en : std_logic;
 
     --ROM <> CPU
     signal instruction  : std_logic_vector(11 downto 0);
@@ -345,7 +348,8 @@ architecture SWS_top_Behavior of SWS_top is
                 
                 DMA_INTERRUPT => dma_interrupt,
                 INTERRUPT_ACK => interrupt_ack,
-
+				
+				WRITE_CFG_EN => dma_write_en,
                 DATABUS 	=> databus
 
             );
@@ -410,7 +414,7 @@ architecture SWS_top_Behavior of SWS_top is
                 RAM_ADDR    => address_cpu,
                 RAM_WRITE   => write_en_cpu,
                 RAM_OE      => oe_cpu,
-			   RAM_READ_RDY => read_rdy_cpu,
+			    RAM_READ_RDY => read_rdy_cpu,
     
                 DMA_RQ      => dma_rq,
                 DMA_READY   => ready,
@@ -418,6 +422,7 @@ architecture SWS_top_Behavior of SWS_top is
                 DMA_SEND    => send_comm,
                 DMA_INTERRUPT => dma_interrupt,
                 INTERRUPT_ACK => interrupt_ack,
+				DMA_WR_EN	=> dma_write_en,
                 
                 COUNTER_START => ctr_start,
                 COUNTER_BUSY => ctr_busy,

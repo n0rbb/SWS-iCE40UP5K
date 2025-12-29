@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS PROGRAM ROM MODULE
@@ -87,78 +87,84 @@ architecture ROM_Behavior of ROM is
     --constant W52 : std_logic_vector(11 downto 0) := SOK;
 
     -- #SOK
-    constant W53 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
-    constant W54 : std_logic_vector(11 downto 0) := X"03B"; -- ;
-    constant W55 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W56 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
-    constant W57 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
-    constant W58 : std_logic_vector(11 downto 0) := X"050"; -- P
-    constant W59 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W60 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_LSB;
-    constant W61 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000"; 
-    constant W62 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
-    constant W63 : std_logic_vector(11 downto 0) := INI;
+	constant W52 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_DMA;
+	constant W53 : std_logic_vector(11 downto 0) := X"002";
+    constant W54 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
+    constant W55 : std_logic_vector(11 downto 0) := X"03B"; -- ;
+    constant W56 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W57 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
+    constant W58 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
+    constant W59 : std_logic_vector(11 downto 0) := X"050"; -- P
+    constant W60 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W61 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI1;
+    constant W62 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000"; 
+    constant W63 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W64 : std_logic_vector(11 downto 0) := INI;
 
     
     -- #ERR
-    constant W64 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
-    constant W65 : std_logic_vector(11 downto 0) := X"045"; -- E
-    constant W66 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W67 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
-    constant W68 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
-    constant W69 : std_logic_vector(11 downto 0) := X"052"; --  R
-    constant W70 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W71 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_LSB;
-    constant W72 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000"; 
-    constant W73 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
-    constant W74 : std_logic_vector(11 downto 0) := INI;
+	constant W65 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_DMA;
+	constant W66 : std_logic_vector(11 downto 0) := X"002";
+    constant W67 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
+    constant W68 : std_logic_vector(11 downto 0) := X"045"; -- E
+    constant W69 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W70 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
+    constant W71 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_ACC;
+    constant W72 : std_logic_vector(11 downto 0) := X"052"; --  R
+    constant W73 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W74 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI1;
+    constant W75 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000"; 
+    constant W76 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W77 : std_logic_vector(11 downto 0) := INI;
     
     
     -- #SFC
-    constant W75 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_A;
-    constant W76 : std_logic_vector(11 downto 0) := X"0" & DMA_RX_BUFFER_MID;	
-	constant W77 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_NOP;
-    constant W78 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_ASCII2BIN;
-    constant W79 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_ACC & DST_A;
-    constant W80 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_B;
-    constant W81 : std_logic_vector(11 downto 0) := X"000";
-    constant W82 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPG;
-    constant W83 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
-    constant W84 : std_logic_vector(11 downto 0) := ERR;
-    constant W85 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & RUN & "0000";
-    constant W86 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
-    constant W87 : std_logic_vector(11 downto 0) := SOK;
+    constant W78 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_A;
+    constant W79 : std_logic_vector(11 downto 0) := X"0" & DMA_RX_BUFFER_MID;	
+	constant W80 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_NOP;
+    constant W81 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_ASCII2BIN;
+    constant W82 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_ACC & DST_A;
+    constant W83 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_B;
+    constant W84 : std_logic_vector(11 downto 0) := X"000";
+    constant W85 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPG;
+    constant W86 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
+    constant W87 : std_logic_vector(11 downto 0) := ERR;
+    constant W88 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & RUN & "0000";
+    constant W89 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W90 : std_logic_vector(11 downto 0) := SOK;
  
     
-    -- #RFC 
-    constant W88 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_A;
-    constant W89 : std_logic_vector(11 downto 0) := X"001";
-    constant W90 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_ASCII2BIN;
-    constant W91 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_ACC & DST_A;
-    constant W92 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_B;
-    constant W93 : std_logic_vector(11 downto 0) := X"000";
-    constant W94 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPG;
-    constant W95 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
-    constant W96 : std_logic_vector(11 downto 0) := ERR;
-    constant W97 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
-    constant W98 : std_logic_vector(11 downto 0) := x"00B";
-    constant W99 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W100 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
-    constant W101 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
-    constant W102 : std_logic_vector(11 downto 0) := X"00A";
-    constant W103 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W104 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI1;
-    constant W105 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
-    constant W106 : std_logic_vector(11 downto 0) := X"009";
-    constant W107 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W108 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI2;
-    constant W109 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
-    constant W110 : std_logic_vector(11 downto 0) := X"008";
-    constant W111 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
-    constant W112 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_LSB;
-    constant W113 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000";
-    constant W114 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
-    constant W115 : std_logic_vector(11 downto 0) := INI;
+    -- #RFC
+	constant W91 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_DMA;
+	constant W92 : std_logic_vector(11 downto 0) := X"004";
+    constant W93 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_A;
+    constant W94 : std_logic_vector(11 downto 0) := X"001";
+    constant W95 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_ASCII2BIN;
+    constant W96 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_ACC & DST_A;
+    constant W97 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_B;
+    constant W98 : std_logic_vector(11 downto 0) := X"000";
+    constant W99 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPG;
+    constant W100 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
+    constant W101 : std_logic_vector(11 downto 0) := ERR;
+    constant W102 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W103 : std_logic_vector(11 downto 0) := x"00B";
+    constant W104 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W105 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
+    constant W106 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W107 : std_logic_vector(11 downto 0) := X"00A";
+    constant W108 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W109 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI1;
+    constant W110 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W111 : std_logic_vector(11 downto 0) := X"009";
+    constant W112 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W113 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI2;
+    constant W114 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W115 : std_logic_vector(11 downto 0) := X"008";
+    constant W116 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W117 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_LSB;
+    constant W118 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000";
+    constant W119 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W120 : std_logic_vector(11 downto 0) := INI;
     
 
 
@@ -218,7 +224,7 @@ architecture ROM_Behavior of ROM is
                 --W49 when X"031",
                 --W50 when X"032",
                 --W51 when X"033",
-                --W52 when X"034",
+                W52 when X"034",
                 W53 when X"035",
                 W54 when X"036",
                 W55 when X"037",
@@ -282,5 +288,10 @@ architecture ROM_Behavior of ROM is
                 W113 when X"071",
                 W114 when X"072",
 			    W115 when X"073",
+				W116 when X"074", 
+				W117 when X"075", 
+				W118 when X"076", 
+				W119 when X"079",
+				W120 when X"07A",
                 (others => '0') when others;
 end ROM_Behavior;

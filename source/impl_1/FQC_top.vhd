@@ -15,6 +15,9 @@ entity FQC_top is
         --FRC_RQ    : out std_logic;
         BUSY_FLAG 	: out std_logic;
 		
+		--CFG_BUS	: in std_logic_vector(7 downto 0);
+		--REG_ADDR	: in std_logic_vector(1 downto 0); 
+		
 		COUNT_READ 	: in std_logic;
 		COUNT_RDY 	: out std_logic;
         COUNT_OUT 	: out std_logic_vector(7 downto 0)
@@ -65,7 +68,7 @@ architecture FQC_Behavior of FQC_top is
 	signal count_r1, count_r2, count_r3, count_r4 : std_logic_vector(7 downto 0);
 	signal count_ready : std_logic;
 	
-	signal counter_status_r : std_logic; --Registro que indica quÃƒÂ© contadores estÃƒÂ¡n funcionando
+	signal counter_status_r : std_logic; --Registro que indica quÃƒÆ’Ã‚Â© contadores estÃƒÆ’Ã‚Â¡n funcionando
 	
 	signal bytecounter_sv : unsigned(1 downto 0);
   

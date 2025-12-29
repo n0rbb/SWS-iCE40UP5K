@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃƒÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 25.04.2025 14:48:45
 -- Design Name: SWS_INSTRUCTION CONSTANTS PACKAGE
@@ -33,11 +33,13 @@ package INST_pkg is
 
     --JUMP CONSTANTS
     constant INI            : std_logic_vector(11 downto 0) := X"000";
-    constant LED            : std_logic_vector(11 downto 0) := X"01E";
-    constant SFC            : std_logic_vector(11 downto 0) := X"04B";
-    constant RFC            : std_logic_vector(11 downto 0) := X"057";
-    constant SOK            : std_logic_vector(11 downto 0) := X"035";
-    constant ERR            : std_logic_vector(11 downto 0) := X"040";
+    --constant LED            : std_logic_vector(11 downto 0) := X"01E";
+	constant SOK            : std_logic_vector(11 downto 0) := X"034";
+	constant ERR            : std_logic_vector(11 downto 0) := X"041";
+    constant SFC            : std_logic_vector(11 downto 0) := X"04E";
+    constant RFC            : std_logic_vector(11 downto 0) := X"05B";
+    
+    
 
     -- TYPE 1 INSTRUCTIONS
     constant TYPE_1         : std_logic_vector(1 downto 0)  := "00";
@@ -74,6 +76,8 @@ package INST_pkg is
     constant DST_IDX        : std_logic_vector(2 downto 0)  := "011";
     constant DST_MEM        : std_logic_vector(2 downto 0)  := "100";
     constant DST_IDX_MEM    : std_logic_vector(2 downto 0)  := "101";
+	constant DST_DMA		: std_logic_vector(2 downto 0)	:= "110";
+	constant DST_FQC		: std_logic_vector(2 downto 0)	:= "111";
 
  
     -- TYPE 4 INSTRUCTIONS
