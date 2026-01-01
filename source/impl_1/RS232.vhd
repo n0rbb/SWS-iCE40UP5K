@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÍNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS UART RS232 INTERFACE 
@@ -111,7 +111,7 @@ architecture RS232_Behavior of RS232 is
     signal tx_rdy_i   : std_logic;
     
     -- Receiver
-    signal linerd_in  : std_logic;  -- internal RX line
+    --signal linerd_in  : std_logic;  -- internal RX line
     signal valid_out  : std_logic;  -- valid bit at the receiver
     signal code_out   : std_logic;  -- bit at the receiver output
 

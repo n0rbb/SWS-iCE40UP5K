@@ -15,13 +15,14 @@ entity FQC_top is
         --FRC_RQ    : out std_logic;
         BUSY_FLAG 	: out std_logic;
 		
-		--CFG_BUS	: in std_logic_vector(7 downto 0);
-		--REG_ADDR	: in std_logic_vector(1 downto 0); 
+		CFG_BUS	: in std_logic_vector(7 downto 0);
+		REG_ADDR	: in std_logic_vector(1 downto 0); 
 		
 		COUNT_READ 	: in std_logic;
 		COUNT_RDY 	: out std_logic;
-        COUNT_OUT 	: out std_logic_vector(7 downto 0)
+        COUNT_OUT 	: out std_logic_vector(7 downto 0);
 		
+		COUNT_WR_EN : in std_logic
         );
 end FQC_top;
 
@@ -48,6 +49,8 @@ architecture FQC_Behavior of FQC_top is
 			ENABLE : in std_logic;
 			CLEAR : in std_logic;
 			
+			TARGET_REG : in std_logic_vector(7 downto 0);
+			
 			--READY : out std_logic;
 			COUNT_ACK : in std_logic;
 			COUNTER_RDY : out std_logic;
@@ -68,9 +71,16 @@ architecture FQC_Behavior of FQC_top is
 	signal count_r1, count_r2, count_r3, count_r4 : std_logic_vector(7 downto 0);
 	signal count_ready : std_logic;
 	
-	signal counter_status_r : std_logic; --Registro que indica quÃƒÆ’Ã‚Â© contadores estÃƒÆ’Ã‚Â¡n funcionando
+	signal counter_status_r : std_logic; --Registro que indica quÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© contadores estÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡n funcionando
 	
 	signal bytecounter_sv : unsigned(1 downto 0);
+	
+	signal fqc_regs : array8_regs(3 downto 0);
+	
+	-- 00 STATUS REG
+	-- 01 ARM REG
+	-- 02 FQ1 CFG REG
+	-- 03 FQ2 CFG REG
   
     begin
 		
@@ -87,6 +97,9 @@ architecture FQC_Behavior of FQC_top is
 				RESET			=> RESET,
 				FAST_CLK_PORT 	=> clk_120_mhz,
 				INPUT 			=> INPUT,
+				
+				TARGET_REG       => fqc_regs(2),
+				
 				CLEAR 			=> count_clear,
 				ENABLE 			=> count_enable,
 				COUNTER_RDY		=> counter_ready,
@@ -172,12 +185,21 @@ architecture FQC_Behavior of FQC_top is
 				count_r2 <= (others => '0');
 				count_r3 <= (others => '0');
 				count_r4 <= (others => '0');
+				
+				fqc_regs(0) <= (others => '0');
+				fqc_regs(1) <= (others => '0');
+				fqc_regs(2) <= X"64"; --Default 100
+				fqc_regs(3) <= X"64";
                
             elsif CLK_PORT'event and CLK_PORT = '1' then
                 case current_state is
                     when Idle =>
 						counter_ack <= '0';
 						bytecounter_sv <= "00";
+						
+						if COUNT_WR_EN = '1' then
+							fqc_regs(to_integer(unsigned(REG_ADDR))) <= CFG_BUS;
+						end if;
 						
                     when RunCounter => -- Nuthin'
                         counter_status_r <= '1';
@@ -199,6 +221,7 @@ architecture FQC_Behavior of FQC_top is
 							counter_status_r <= '0';
 							count_ready <= '0';
 						end if;
+						
 				   when others =>
                     
                 end case;

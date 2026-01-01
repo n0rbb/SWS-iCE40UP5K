@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 25.04.2025 14:48:45
 -- Design Name: SWS_INSTRUCTION CONSTANTS PACKAGE
@@ -38,7 +38,7 @@ package INST_pkg is
 	constant ERR            : std_logic_vector(11 downto 0) := X"041";
     constant SFC            : std_logic_vector(11 downto 0) := X"04E";
     constant RFC            : std_logic_vector(11 downto 0) := X"05B";
-    
+    constant CFG			: std_logic_vector(11 downto 0) := X"07B";
     
 
     -- TYPE 1 INSTRUCTIONS
@@ -76,15 +76,15 @@ package INST_pkg is
     constant DST_IDX        : std_logic_vector(2 downto 0)  := "011";
     constant DST_MEM        : std_logic_vector(2 downto 0)  := "100";
     constant DST_IDX_MEM    : std_logic_vector(2 downto 0)  := "101";
-	constant DST_DMA		: std_logic_vector(2 downto 0)	:= "110";
-	constant DST_FQC		: std_logic_vector(2 downto 0)	:= "111";
+	constant DST_DMA		   : std_logic_vector(2 downto 0)  := "110";
+	--constant DST_FQC		: std_logic_vector(2 downto 0)	:= "111";
 
  
     -- TYPE 4 INSTRUCTIONS
     constant TYPE_4         : std_logic_vector(1 downto 0)  := "11";
     constant SND            : std_logic_vector(1 downto 0)  := "00";
     constant RUN            : std_logic_vector(1 downto 0)  := "01";
-	constant DELAY		    : std_logic_vector(1 downto 0)  := "10";
+	constant FQ_CFG		   : std_logic_vector(1 downto 0)  := "10";
 
     --ALU operations
     TYPE alu_op_t IS (

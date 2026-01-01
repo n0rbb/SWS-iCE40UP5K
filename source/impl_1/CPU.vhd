@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS CENTRAL PROCESSING UNIT
@@ -42,6 +42,7 @@ entity CPU is
         DMA_READY   : in std_logic;
         DMA_ACK     : out std_logic;
         DMA_SEND    : out std_logic;
+		DMA_SCFG	: out std_logic;
 
         ALU_OP      : out alu_op_t;
         INDEX_REG   : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -63,13 +64,13 @@ entity CPU is
 end CPU;
 
 architecture CPU_Behavior of CPU is
-    type states is (Idle, Fetch, OpFetch, Decode, Execute, Receive, Transmit, Interrupt, RunCounter, RdCounter);
+    type states is (Idle, Fetch, OpFetch, Decode, Execute, Receive, Transmit, Interrupt, RunCounter, RdCounter, SendConfig);
 	signal current_state, next_state: states;
 
 	signal pc_reg, ins_reg, tmp_reg: std_logic_vector(7 downto 0); -- CPU registers
 	signal pc, ins, tmp: std_logic_vector(7 downto 0); -- Combinational signals
 	signal pc_ctx_reg, ins_ctx_reg, tmp_ctx_reg : std_logic_vector(7 downto 0); --Registros para contexto de la CPU
-	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã‚Â³n a interrupciones
+	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n a interrupciones
 
 
     begin
@@ -89,6 +90,7 @@ architecture CPU_Behavior of CPU is
                 
                 DMA_ACK     <= '0';
                 DMA_SEND    <= '0';
+				DMA_SCFG 	<= '0';
 				DMA_WR_EN	<= '0';
 
                 ALU_OP      <= nop;
@@ -112,7 +114,6 @@ architecture CPU_Behavior of CPU is
 
                         else
                             next_state <= Fetch;
-                        
                         end if;
 
                     when Receive =>
@@ -148,11 +149,16 @@ architecture CPU_Behavior of CPU is
                                 end if;
                             
                             when TYPE_4 => --11, peripheral operations
-                                if ins_reg(5 downto 3) = "00" then
-                                    next_state <= Transmit;
-                                else 
-                                    next_state <= RunCounter;
-                                end if;
+                                case ins_reg(5 downto 4) is
+								when SND =>
+									next_state <= Transmit;
+								when RUN =>
+									next_state <= RunCounter;
+								when FQ_CFG => 
+									next_state <= SendConfig;
+								when others =>
+									next_state <= Idle;
+							  end case;
                             
                             when others =>
                                 -- next_state <= Decode;
@@ -328,23 +334,25 @@ architecture CPU_Behavior of CPU is
                                 end if;
 								
 								if ins_reg(4) = '1' and RAM_READ_RDY = '0' then
-									next_state <= Execute; --Mantengo la ejecuciÃƒÂ³n un ciclo extra si la operaciÃƒÂ³n es de lectura para que la ALU pille el databus
+									next_state <= Execute; --Mantengo la ejecuciÃƒÆ’Ã‚Â³n un ciclo extra si la operaciÃƒÆ’Ã‚Â³n es de lectura para que la ALU pille el databus
 								else
 									next_state <= Idle;
 								end if;
 
-                        when TYPE_4 => --Peripheral operations and extras (delay)
-                            case ins_reg(5 downto 4) is
-                                when SND =>
-                                    next_state <= Transmit;
-                                when RUN =>
-                                    next_state <= RunCounter;
-                                when others =>
-                                    next_state <= Idle;
-                            end case;
+                        --when TYPE_4 => --Peripheral operations and extras
+                            --case ins_reg(5 downto 4) is
+                                --when SND =>
+                                    --next_state <= Transmit;
+                                --when RUN =>
+                                    --next_state <= RunCounter;
+								 --when FQ_CFG => 
+									--next_state <= SendConfig;
+                                --when others =>
+                                    --next_state <= Idle;
+                            --end case;
                             
                         when others =>
-                        
+							next_state <= Idle;
                         end case;
                     
                     when Transmit =>
@@ -354,7 +362,20 @@ architecture CPU_Behavior of CPU is
                         else
                             next_state <= Transmit;
                         end if;
-                        
+						
+					when SendConfig =>
+						DMA_SCFG <= '1';
+						
+						if DMA_RQ = '1' then
+							DMA_ACK <= '1'; -- Concedo los buses
+						end if;
+						
+						if DMA_READY = '1' then
+							next_state <= Idle; 
+                        else
+							next_state <= SendConfig;
+						end if;
+						
                     when Interrupt =>
                         if int_ack_flag = '1' then  
                             --INTERRUPT_ACK <= '1';
@@ -372,6 +393,7 @@ architecture CPU_Behavior of CPU is
                         next_state <= Idle;
                        
                     when others =>
+						next_state <= Idle;
 
                 end case;
                 

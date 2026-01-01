@@ -1,7 +1,7 @@
 
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 12:23:02
 -- Design Name: SPIN-WAVE SENSOR SPARTAN TOP
@@ -64,7 +64,7 @@ architecture SWS_top_Behavior of SWS_top is
         );
     end component;
 
-    -- Data-Memory Access
+    -- Direct-Memory Access
     component DMA is
         port ( 
             CLK_PORT 	: in std_logic;
@@ -89,12 +89,16 @@ architecture SWS_top_Behavior of SWS_top is
 
             DMA_ACK 	: in std_logic;
             SEND_COMM 	: in std_logic;
+			SEND_CONF	: in std_logic;
             DMA_RQ 		: out std_logic;
             READY 		: out std_logic;	
 			
 			COUNT_RDY	: in std_logic;
 			COUNT_OUT	: in std_logic_vector(7 downto 0);
 			COUNT_READ	: out std_logic;
+			COUNT_CFG	: out std_logic_vector(7 downto 0);
+			COUNT_REG_ADDR : out std_logic_vector(1 downto 0);
+			COUNT_WR_EN	: out std_logic;
             
             INTERRUPT_ACK : in std_logic;
             DMA_INTERRUPT : out std_logic;
@@ -176,6 +180,7 @@ architecture SWS_top_Behavior of SWS_top is
             DMA_READY   : in std_logic;
             DMA_ACK     : out std_logic;
             DMA_SEND    : out std_logic;
+			DMA_SCFG	: out std_logic;
             DMA_INTERRUPT : in std_logic;
             INTERRUPT_ACK : out std_logic;
     
@@ -216,7 +221,11 @@ architecture SWS_top_Behavior of SWS_top is
 			
 			COUNT_RDY : out std_logic;
 			COUNT_READ : in std_logic;
-			COUNT_OUT : out std_logic_vector(7 downto 0)
+			COUNT_OUT : out std_logic_vector(7 downto 0);
+			CFG_BUS	  : in std_logic_vector(7 downto 0); -- OPTIMISATION => MERGE COUNT_OUT AND CFG_BUS into an inout.
+			REG_ADDR  : in std_logic_vector(1 downto 0);
+			COUNT_WR_EN	: in std_logic
+			
         );
     end component;
     
@@ -268,6 +277,7 @@ architecture SWS_top_Behavior of SWS_top is
     signal dma_rq       : std_logic;
     signal dma_ack      : std_logic;
     signal send_comm    : std_logic;
+	signal send_conf	: std_logic;
     signal ready        : std_logic;
     signal dma_interrupt : std_logic;
     signal interrupt_ack : std_logic;
@@ -291,6 +301,9 @@ architecture SWS_top_Behavior of SWS_top is
 	signal count_ready 	: std_logic;
 	signal count_out	: std_logic_vector(7 downto 0);
 	signal count_read	: std_logic;
+	signal count_cfg	: std_logic_vector(7 downto 0);
+	signal count_addr	: std_logic_vector(1 downto 0);
+	signal count_wr_en : std_logic;
     
     begin
 
@@ -335,16 +348,20 @@ architecture SWS_top_Behavior of SWS_top is
                 ADDRESS 		=> address_dma,
                 WRITE_EN 	=> write_en_dma,
                 OE 			=> oe_dma,
-			   DMA_READ_RDY 	=> read_rdy_dma,
+				DMA_READ_RDY 	=> read_rdy_dma,
         
                 DMA_ACK 		=> dma_ack,
                 SEND_COMM 	=> send_comm,
+				SEND_CONF	=> send_conf,
                 DMA_RQ 		=> dma_rq,
                 READY 		=> ready,
 				
-			   COUNT_RDY 	=> count_ready,
-			   COUNT_OUT		=> count_out,
-			   COUNT_READ	=> count_read,
+				COUNT_RDY 	=> count_ready,
+				COUNT_OUT		=> count_out,
+				COUNT_READ	=> count_read,
+				COUNT_CFG	=> count_cfg,
+				COUNT_REG_ADDR => count_addr,
+				COUNT_WR_EN => count_wr_en,
                 
                 DMA_INTERRUPT => dma_interrupt,
                 INTERRUPT_ACK => interrupt_ack,
@@ -420,6 +437,7 @@ architecture SWS_top_Behavior of SWS_top is
                 DMA_READY   => ready,
                 DMA_ACK     => dma_ack,
                 DMA_SEND    => send_comm,
+				DMA_SCFG	=> send_conf,
                 DMA_INTERRUPT => dma_interrupt,
                 INTERRUPT_ACK => interrupt_ack,
 				DMA_WR_EN	=> dma_write_en,
@@ -463,7 +481,10 @@ architecture SWS_top_Behavior of SWS_top is
                 
 				COUNT_READ 	=> count_read,
 				COUNT_RDY	=> count_ready,
-				COUNT_OUT	=> count_out
+				COUNT_OUT	=> count_out, 
+				CFG_BUS 	=> count_cfg,
+				REG_ADDR 	=> count_addr,
+				COUNT_WR_EN => count_wr_en
             );
            
 		

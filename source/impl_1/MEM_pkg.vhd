@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
 -- 
 -- Create Date: 23.04.2025 10:55:57
 -- Design Name: SWS_RAM ADDRESS PACKAGE
@@ -25,8 +25,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 package MEM_pkg is
     -- Data types
-    SUBTYPE item_array8_ram IS std_logic_vector (7 downto 0);
-    TYPE array8_ram IS array (integer range <>) of item_array8_ram;
+    SUBTYPE item_array8_regs IS std_logic_vector (7 downto 0);
+    TYPE array8_regs IS array (integer range <>) of item_array8_regs;
 
     --Address names
     constant DMA_RX_BUFFER_MSB : std_logic_vector(7 downto 0) := X"00";
@@ -37,9 +37,13 @@ package MEM_pkg is
     constant DMA_TX_BUFFER_MI1 : std_logic_vector(7 downto 0) := X"05";
     constant DMA_TX_BUFFER_MI2 : std_logic_vector(7 downto 0) := X"06";
     constant DMA_TX_BUFFER_LSB : std_logic_vector(7 downto 0) := X"07";  
-    --constant LED_BASE          : std_logic_vector(7 downto 0) := X"08"; --08, 09, 0A
-    constant DATA_BASE         : std_logic_vector(7 downto 0) := X"08";
-
+    --constant LED_BASE          : std_logic_vector(7 downto 0) := X"08"; 
+    constant DATA_BASE         : std_logic_vector(7 downto 0) := X"08"; --08, 09, 0A, 0B,  0C, OD, OE, OF
+	constant FQC_STATUS		   : std_logic_vector(7 downto 0) := X"10";
+	constant FQC_ARMED		   : std_logic_vector(7 downto 0) := X"11";
+	constant FQ1_LIM		   : std_logic_vector(7 downto 0) := X"12";
+	constant FQ2_LIM		   : std_logic_vector(7 downto 0) := X"13";
+ 
     
 
 end MEM_pkg;
