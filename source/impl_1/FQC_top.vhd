@@ -71,7 +71,7 @@ architecture FQC_Behavior of FQC_top is
 	signal count_r1, count_r2, count_r3, count_r4 : std_logic_vector(7 downto 0);
 	signal count_ready : std_logic;
 	
-	signal counter_status_r : std_logic; --Registro que indica quÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© contadores estÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡n funcionando
+	signal counter_status_r : std_logic; --Registro que indica quÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© contadores estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡n funcionando
 	
 	signal bytecounter_sv : unsigned(1 downto 0);
 	

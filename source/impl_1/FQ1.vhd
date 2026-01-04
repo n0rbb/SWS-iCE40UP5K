@@ -145,6 +145,10 @@ begin
 				count_low_done <= '0';
 				count_mid1_done <= '0';
 				count_mid2_done <= '0';
+				
+				count_mid1_carry <= "0";
+				count_mid2_carry <= "0";
+				count_high_carry <= "0";
 				--count_sg <= (others => '0');
 				count_r <= (others => '0');
 				
@@ -163,6 +167,10 @@ begin
 					count_low_done <= '0';
 					count_mid1_done <= '0';
 					count_mid2_done <= '0';
+					
+					count_mid1_carry <= "0";
+					count_mid2_carry <= "0";
+					count_high_carry <= "0";
 									elsif busy_flag_reg = '1' then
 					--count_sg <= count_sg + 1;
 					
