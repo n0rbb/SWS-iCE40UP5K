@@ -92,7 +92,7 @@ architecture Testbench of tb_iCE40_SWS is
                 Transmit(rd, X"45"); --E
                 wait for 1000 us;
                 
-                --Command 2: S01 (Run Counter 1)
+                --Command 2: S01 (Run Counters (unarmed))
                 Transmit(rd, X"53");
                 wait for 50 us;
                 Transmit(rd, X"30");
@@ -109,6 +109,13 @@ architecture Testbench of tb_iCE40_SWS is
 			    wait for 500 us;
 				
 				--Try again
+				-- Command 4: C X"01" "01" (Arm Counter 1)
+				Transmit(rd, X"43");
+				wait for 50 us;
+				Transmit(rd, X"01");
+                wait for 50 us;
+                Transmit(rd, X"01");
+			    wait for 200 us;
 				
 				--Command 4: S01 (Run Counter 1)
                 Transmit(rd, X"53");

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 23.04.2025 10:55:57
 -- Design Name: SWS_RAM ADDRESS PACKAGE
@@ -38,7 +38,7 @@ package MEM_pkg is
     constant DMA_TX_BUFFER_MI2 : std_logic_vector(7 downto 0) := X"06";
     constant DMA_TX_BUFFER_LSB : std_logic_vector(7 downto 0) := X"07";  
     --constant LED_BASE          : std_logic_vector(7 downto 0) := X"08"; 
-    constant DATA_BASE         : std_logic_vector(7 downto 0) := X"08"; --08, 09, 0A, 0B,  0C, OD, OE, OF
+    constant DATA_BASE         : std_logic_vector(7 downto 0) := X"08"; --08, 09, 0A, 0B,  0C, 0D, 0E, 0F
 	constant FQC_STATUS		   : std_logic_vector(7 downto 0) := X"10";
 	constant FQC_ARMED		   : std_logic_vector(7 downto 0) := X"11";
 	constant FQ1_LIM		   : std_logic_vector(7 downto 0) := X"12";

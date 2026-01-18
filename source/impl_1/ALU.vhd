@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
 -- 
 -- Create Date: 23.04.2025 11:29:38
 -- Design Name: ARITHMETIC - LOGIC UNIT
@@ -42,7 +42,7 @@ end ALU;
 architecture ALU_Behavior of ALU is
      signal a, b, acc, index_r                    : std_logic_vector(7 downto 0);
      signal a_reg, b_reg, acc_reg, index_r_reg    : std_logic_vector(7 downto 0);
-
+	 signal sum 								  : std_logic_vector(8 downto 0);
      signal flag_zero, flag_err                   : std_logic;
      signal flag_zero_reg, flag_err_reg           : std_logic;
      
@@ -53,7 +53,7 @@ architecture ALU_Behavior of ALU is
     signal databus_signal                         : std_logic_vector(7 downto 0);
      
      begin
-          ALU_Core  : process(acc, a_reg, b_reg, acc_reg, index_r_reg, flag_zero_reg, flag_err_reg, ALU_OP, DATABUS)
+          ALU_Core  : process(acc, a_reg, b_reg, acc_reg, index_r_reg, flag_zero_reg, flag_err_reg, sum, ALU_OP, DATABUS)
                begin
                -- Default values of the signals and flags
                     a              <= a_reg;
@@ -64,6 +64,8 @@ architecture ALU_Behavior of ALU is
                     flag_zero      <= flag_zero_reg;
                     flag_err       <= flag_err_reg;
                     
+					sum 		   <= (others => '0');
+					
                     databus_signal        <= (others=>'Z');
     
                     -- Operations
@@ -92,7 +94,7 @@ architecture ALU_Behavior of ALU is
                               index_r <= acc_reg;
     
                          when op_cmpe =>
-                              if unsigned(a_reg) = unsigned(b_reg) then --Probar a cargar la resta en el acumulador y tirar el flag de ahÃƒÂ­!
+                              if unsigned(a_reg) = unsigned(b_reg) then --Probar a cargar la resta en el acumulador y tirar el flag de ahÃƒÆ’Ã‚Â­!
                                    flag_zero <= '1';
                               else
                                    flag_zero <= '0';
@@ -114,12 +116,38 @@ architecture ALU_Behavior of ALU is
                         
                          when op_ascii2bin =>
                               acc <= std_logic_vector(unsigned(a_reg) - ASCII0);
-                              if(unsigned(acc) > 9) then --Aquí compruebo inmediatamente el acumulador y no el registro
+                              if(unsigned(acc) > 9) then --AquÃ­ compruebo inmediatamente el acumulador y no el registro
                                    flag_err <= '1';
                               else
                                    flag_err <= '0';
                               end if;
-    
+						 
+						 when op_add =>
+							  sum <= std_logic_vector(unsigned('0' & a_reg) + unsigned('0' & b_reg));
+							  acc <= sum(7 downto 0);
+							  if sum(8) = '1' then --overflow
+									flag_err <= '1';
+							  end if;
+							  
+							  if unsigned(acc) = 0 then
+									flag_zero <= '1';
+							  end if;
+						
+						 when op_subt =>
+							  sum <= std_logic_vector(unsigned('0' & a_reg) - unsigned('0' & b_reg));
+							  acc <= sum(7 downto 0);
+							  if sum(8) = '1' then --this got negative
+									flag_err <= '1';
+							  end if;
+			
+							  if unsigned(acc) = 0 then
+									flag_zero <= '1';
+							  end if;
+							  
+						 when op_shiftl =>
+							  acc <= std_logic_vector(shift_left(unsigned(a_reg), to_integer(unsigned(b_reg))));
+								
+						 
                          when op_oeacc =>
                               databus_signal <= acc_reg;
                         

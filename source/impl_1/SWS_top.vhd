@@ -1,7 +1,7 @@
 
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 12:23:02
 -- Design Name: SPIN-WAVE SENSOR SPARTAN TOP
@@ -34,7 +34,7 @@ entity SWS_top is
         RS232_TX    : out std_logic;
         
         --LED_PORT    : out std_logic_vector(2 downto 0);
-        INPUT_FRQ   : in std_logic
+        INPUT_FRQ   : in std_logic_vector(1 downto 0)
     );
 end SWS_top;
 
@@ -185,7 +185,7 @@ architecture SWS_top_Behavior of SWS_top is
             INTERRUPT_ACK : out std_logic;
     
             COUNTER_START : out std_logic;
-            COUNTER_BUSY  : in std_logic;
+            COUNTER_BUSY  : in std_logic_vector(1 downto 0);
 
             ALU_OP      : out alu_op_t;
             INDEX_REG   : in std_logic_vector(7 downto 0);
@@ -215,9 +215,9 @@ architecture SWS_top_Behavior of SWS_top is
             RESET : in std_logic;
             CLK_PORT : in std_logic;
             --FAST_CLK_PORT : in std_logic;
-            INPUT : in std_logic;
+            INPUT : in std_logic_vector(1 downto 0);
             START : in std_logic;
-            BUSY_FLAG : out std_logic;
+            BUSY_FLAG : out std_logic_vector(1 downto 0);
 			
 			COUNT_RDY : out std_logic;
 			COUNT_READ : in std_logic;
@@ -295,7 +295,7 @@ architecture SWS_top_Behavior of SWS_top is
     
     -- FRC <> CPU
     signal ctr_start    : std_logic;
-    signal ctr_busy     : std_logic;
+    signal ctr_busy     : std_logic_vector(1 downto 0);
 	
 	-- FRC <> DMA
 	signal count_ready 	: std_logic;

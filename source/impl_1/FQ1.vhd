@@ -63,8 +63,8 @@ signal count_ack_sync_r1, count_ack_sync_r2 : std_logic;
 --attribute dont_touch of busy_flag_reg3 : signal is "true";
 
 --And for the FSM not to have too much delay with the setting of the next_state
-attribute enum_encoding : string;
-attribute enum_encoding of states : type is "0001 0010 0100 1000"; 
+--attribute enum_encoding : string;
+--attribute enum_encoding of states : type is "0001 0010 0100 1000"; 
 begin
 		
 		CTR_CDC : process(RESET, FAST_CLK_PORT) --Process to manage the changes in clock domains (control signals and ack)
@@ -103,7 +103,7 @@ begin
 			case current_state is 
 				when Idle =>
 					COUNTER_RDY <= '0';
-					COUNT <= (others => '0');
+					COUNT <= (others => 'Z');
 					if count_enable_sync_r2 = '1' then 
 						next_state <= Sync;
 					else
@@ -113,7 +113,7 @@ begin
 				when Sync =>
 					sync_flag <= '1';
 					COUNTER_RDY <= '0';
-					COUNT <= (others => '0');
+					COUNT <= (others => 'Z');
 					
 					if elapsed_periods > 0 then
 						next_state <= Busy;
@@ -124,7 +124,7 @@ begin
 				when Busy =>
 					busy_flag <= '1';
 					COUNTER_RDY <= '0';
-					COUNT <= (others => '0');
+					COUNT <= (others => 'Z');
 					if target_reached = '1' then
 						next_state <= Done;
 					else
