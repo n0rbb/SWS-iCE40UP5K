@@ -1,0 +1,95 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.RS232_test.ALL;
+
+
+entity tb_iCE40_SWS_2counters is
+end tb_iCE40_SWS_2counters;
+
+architecture Testbench of tb_iCE40_SWS_2counters is
+    component iCE40_SWS is
+        port(
+            --  CLK_SOURCE        : in std_logic; --Uncomment when simulating with external oscillator
+
+            -- User button -- Reset
+            BTN               : in std_logic;
+    
+            -- Communications inteface -RS232
+            UART_RX           : in std_logic;
+            UART_TX           : out std_logic;
+    
+            
+            -- Frequency input
+            FQ_IN             : in std_logic
+        );
+    end component;
+
+    -- Board signals
+    signal clk12mhz     : std_logic;
+    signal reset        : std_logic;
+    signal btn_signal   : std_logic;
+
+    -- UART
+    signal td           : std_logic;
+	signal rd		   : std_logic;
+	--Frequency Mock
+    signal fq_mock      : std_logic;
+
+    constant clkperiod  : time := 83.33 ns; --12 MHz clock frequency
+    constant signalperiod : time := 500 ns; --2 MHz mock signal frequency
+	
+	
+    begin
+        -- Component mapping
+        Sensor_UT : iCE40_SWS
+            port map(
+                --CLK_SOURCE      => clk12mhz, --Uncomment when simulating with external oscillator
+                BTN             => btn_signal,
+                
+                UART_RX         => rd,
+                UART_TX         => td,
+
+                --LED             => led_signal,
+                FQ_IN           => fq_mock
+            ); 
+           
+        
+
+        -- Reset generation
+        reset <= '1', '0' after 1075 ns, '1' after 2075 ns;
+
+        -- Clock generation
+        False_Clock : process
+            begin
+                clk12mhz <= '1';
+                wait for clkperiod/2;
+                clk12mhz <= '0';
+                wait for clkperiod/2; 
+        end process False_Clock;
+        
+        Frequency_Mock : process
+            begin
+                fq_mock <= '0';
+                wait for signalperiod/2;
+                fq_mock <= '1';
+                wait for signalperiod/2;
+        end process Frequency_Mock;
+		
+		UART_Comm : process
+            begin
+                rd <= '1';
+                wait for 50 us;
+                          
+				--Command 1: I-- (Read status)
+                Transmit(rd, X"49");
+                wait for 50 us;
+                Transmit(rd, X"30");
+                wait for 50 us;
+                Transmit(rd, X"01");
+			    wait;
+				
+				
+        end process UART_Comm;
+		-- Signal-port assignation
+        btn_signal <= not(reset);
+	end Testbench;

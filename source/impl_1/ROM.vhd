@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS PROGRAM ROM MODULE
@@ -63,8 +63,13 @@ architecture ROM_Behavior of ROM is
 	constant W30 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPE;
 	constant W31 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
 	constant W32 : std_logic_vector(11 downto 0) := CFG; 
-    constant W33 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
-    constant W34 : std_logic_vector(11 downto 0) := ERR;
+	constant W33 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_B;
+	constant W34 : std_logic_vector(11 downto 0) := X"049"; --I
+	constant W35 : std_logic_vector(11 downto 0) := X"0" & TYPE_1 & ALU_CMPE;
+	constant W36 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_COND;
+	constant W37 : std_logic_vector(11 downto 0) := SHI; 
+    constant W38 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W39 : std_logic_vector(11 downto 0) := ERR;
     
     -- #LED
     --constant W30 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_A;
@@ -197,6 +202,26 @@ architecture ROM_Behavior of ROM is
 	constant W143 : std_logic_vector(11 downto 0) := SOK;
 	
 	
+	-- #SHI
+	constant W144 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_CONST & DST_DMA;
+	constant W145 : std_logic_vector(11 downto 0) := X"003";
+    constant W146 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W147 : std_logic_vector(11 downto 0) := X"0" & FQC_ARMED;
+    constant W148 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W149 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MSB;
+    constant W150 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+    constant W151 : std_logic_vector(11 downto 0) := X"0" & FQ1_LIM;
+    constant W152 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+    constant W153 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI1;
+	constant W154 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & LD & SRC_MEM & DST_ACC;
+	constant W155 : std_logic_vector(11 downto 0) := X"0" & FQ2_LIM;
+	constant W156 : std_logic_vector(11 downto 0) := X"0" & TYPE_3 & SW & SRC_ACC & DST_MEM;
+	constant W157 : std_logic_vector(11 downto 0) := X"0" & DMA_TX_BUFFER_MI2;
+    constant W158 : std_logic_vector(11 downto 0) := X"0" & TYPE_4 & SND & "0000"; 
+    constant W159 : std_logic_vector(11 downto 0) := X"0" & TYPE_2 & JMP_UNCOND;
+    constant W160 : std_logic_vector(11 downto 0) := INI;
+	
+	
      
 
 
@@ -239,11 +264,11 @@ architecture ROM_Behavior of ROM is
                 W32 when X"020",
                 W33 when X"021",
                 W34 when X"022",
-                --W35 when X"023",
-                --W36 when X"024",
-                --W37 when X"025",
-                --W38 when X"026",
-                --W39 when X"027",
+                W35 when X"023",
+                W36 when X"024",
+                W37 when X"025",
+                W38 when X"026",
+                W39 when X"027",
                 --W40 when X"028",
                 --W41 when X"029",
                 --W42 when X"02A",
@@ -323,30 +348,47 @@ architecture ROM_Behavior of ROM is
 				W116 when X"074", 
 				W117 when X"075", 
 				W118 when X"076", 
-				W119 when X"079",
-				W120 when X"07A",
-				W121 when X"07B",
-				W122 when X"07C", 
-				W123 when X"07D", 
-				W124 when X"07E", 
-				W125 when X"07F", 
-				W126 when X"080",
-				W127 when X"081",
-				W128 when X"082", 
-				W129 when X"083",
-				W130 when X"084",
-				W131 when X"085",
-				W132 when X"086",
-				W133 when X"087", 
-				W134 when X"088",
-				W135 when X"089", 
-				W136 when X"08A",
-				W137 when X"08B",
-				W138 when X"08C",
-				W139 when X"08D",
-				W140 when X"08E",
-				W141 when X"08F",
-				W142 when X"090",
-				W143 when X"091",
+				W119 when X"077",
+				W120 when X"078",
+				W121 when X"079",
+				W122 when X"07A", 
+				W123 when X"07B", 
+				W124 when X"07C", 
+				W125 when X"07D", 
+				W126 when X"07E",
+				W127 when X"07F",
+				W128 when X"080", 
+				W129 when X"081",
+				W130 when X"082",
+				W131 when X"083",
+				W132 when X"084",
+				W133 when X"085", 
+				W134 when X"086",
+				W135 when X"087", 
+				W136 when X"088",
+				W137 when X"089",
+				W138 when X"08A",
+				W139 when X"08B",
+				W140 when X"08C",
+				W141 when X"08D",
+				W142 when X"08E",
+				W143 when X"08F",
+				W144 when X"090", 
+				W145 when X"091",
+				W146 when X"092", 
+				W147 when X"093", 
+				W148 when X"094", 
+				W149 when X"095", 
+				W150 when X"096", 
+				W151 when X"097", 
+				W152 when X"098", 
+				W153 when X"099", 
+				W154 when X"09A", 
+				W155 when X"09B", 
+				W156 when X"09C", 
+				W157 when X"09D", 
+				W158 when X"09E",
+				W159 when X"09F",
+				W160 when X"0A0",
                 (others => '0') when others;
 end ROM_Behavior;
