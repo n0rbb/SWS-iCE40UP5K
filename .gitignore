@@ -10,11 +10,18 @@ FQCLK/*
 FQCLK/rtl/*
 !FQCLK/rtl/FQCLK.v
 
+!RAM/
+RAM/*
+!RAM/ram_init.mem
+!RAM/rtl/
+RAM/rtl/*
+!RAM/rtl/RAM.v
 
 #source
 !source/
 !source/impl_1
 
 source/impl_1/iCE40_SWS.vhd.bak
+source/impl_1/tb_iCE40_SWS_2counters.vhd.bak
 
 

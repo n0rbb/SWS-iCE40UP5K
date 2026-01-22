@@ -3,13 +3,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 use work.RS232_test.ALL;
 
 
-entity tb_iCE40_SWS is
-end tb_iCE40_SWS;
+entity tb_iCE40_SWS_Config is
+end tb_iCE40_SWS_Config;
 
-architecture Testbench of tb_iCE40_SWS is
+architecture Testbench of tb_iCE40_SWS_Config is
     component iCE40_SWS is
         port(
-          --  CLK_SOURCE        : in std_logic; --Uncomment when simulating with external oscillator
+            --  CLK_SOURCE        : in std_logic; --Uncomment when simulating with external oscillator
 
             -- User button -- Reset
             BTN               : in std_logic;
@@ -18,8 +18,6 @@ architecture Testbench of tb_iCE40_SWS is
             UART_RX           : in std_logic;
             UART_TX           : out std_logic;
     
-            -- LEDs for testing and debugging
-            --LED               : out std_logic_vector(2 downto 0);
             
             -- Frequency input
             FQ_IN             : in std_logic
@@ -30,8 +28,6 @@ architecture Testbench of tb_iCE40_SWS is
     signal clk12mhz     : std_logic;
     signal reset        : std_logic;
     signal btn_signal   : std_logic;
-	--signal btn_signal   : std_logic_vector(1 downto 0);
-    --signal led_signal   : std_logic_vector(2 downto 0);
 
     -- UART
     signal td           : std_logic;
@@ -41,7 +37,8 @@ architecture Testbench of tb_iCE40_SWS is
 
     constant clkperiod  : time := 83.33 ns; --12 MHz clock frequency
     constant signalperiod : time := 500 ns; --2 MHz mock signal frequency
-
+	
+	
     begin
         -- Component mapping
         Sensor_UT : iCE40_SWS
@@ -77,22 +74,13 @@ architecture Testbench of tb_iCE40_SWS is
                 fq_mock <= '1';
                 wait for signalperiod/2;
         end process Frequency_Mock;
-
-        -- Input stimuli generation
-        UART_Comm : process
+		
+		UART_Comm : process
             begin
                 rd <= '1';
                 wait for 50 us;
                           
-                --Command 1: EEE (Error)
-                Transmit(rd, X"45"); --E
-                wait for 50 us;
-                Transmit(rd, X"45"); --E
-                wait for 50 us;
-                Transmit(rd, X"45"); --E
-                wait for 1000 us;
-                
-                --Command 2: S01 (Run Counters (unarmed))
+				--Command 1: S01 (Run Counter 1)
                 Transmit(rd, X"53");
                 wait for 50 us;
                 Transmit(rd, X"30");
@@ -100,7 +88,7 @@ architecture Testbench of tb_iCE40_SWS is
                 Transmit(rd, X"01");
                 wait for 1000 us;
 				
-				--Command 3: R01 (Read Counter 1)
+				--Command 2: R01 (Read Counter 1)
                 Transmit(rd, X"52");
 				wait for 50 us;
 				Transmit(rd, X"30");
@@ -108,14 +96,13 @@ architecture Testbench of tb_iCE40_SWS is
                 Transmit(rd, X"01");
 			    wait for 500 us;
 				
-				--Try again
-				-- Command 4: C X"01" "01" (Arm Counter 1)
+				--Command 3: C (X"02") 10 --Set periods to 10
 				Transmit(rd, X"43");
 				wait for 50 us;
-				Transmit(rd, X"01");
-                wait for 50 us;
-                Transmit(rd, X"01");
-			    wait for 200 us;
+				Transmit(rd, X"02");
+				wait for 50 us;
+				Transmit(rd, X"0A"); -- 10
+				wait for 500 us;
 				
 				--Command 4: S01 (Run Counter 1)
                 Transmit(rd, X"53");
@@ -131,14 +118,10 @@ architecture Testbench of tb_iCE40_SWS is
 				Transmit(rd, X"30");
                 wait for 50 us;
                 Transmit(rd, X"01");
-				wait;
+			    wait;
+				
+				
         end process UART_Comm;
-
-
-
-        -- Signal-port assignation
+		-- Signal-port assignation
         btn_signal <= not(reset);
-        --led_signal <= LED;
-        --td <= UART_TX;
-        --UART_RX <= rd;
-end Testbench;
+	end Testbench;

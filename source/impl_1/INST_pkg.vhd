@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 25.04.2025 14:48:45
 -- Design Name: SWS_INSTRUCTION CONSTANTS PACKAGE
@@ -33,20 +33,26 @@ package INST_pkg is
 
     --JUMP CONSTANTS
     constant INI            : std_logic_vector(11 downto 0) := X"000";
-    constant LED            : std_logic_vector(11 downto 0) := X"01E";
-    constant SFC            : std_logic_vector(11 downto 0) := X"04B";
-    constant RFC            : std_logic_vector(11 downto 0) := X"057";
-    constant SOK            : std_logic_vector(11 downto 0) := X"035";
-    constant ERR            : std_logic_vector(11 downto 0) := X"040";
+    --constant LED            : std_logic_vector(11 downto 0) := X"01E";
+	constant SOK            : std_logic_vector(11 downto 0) := X"034";
+	constant ERR            : std_logic_vector(11 downto 0) := X"041";
+    constant SFC            : std_logic_vector(11 downto 0) := X"04E";
+    constant RFC            : std_logic_vector(11 downto 0) := X"05B";
+    constant CFG			: std_logic_vector(11 downto 0) := X"087";
+	constant SHI 			: std_logic_vector(11 downto 0) := X"09E";
 
     -- TYPE 1 INSTRUCTIONS
     constant TYPE_1         : std_logic_vector(1 downto 0)  := "00";
 	
-	constant ALU_NOP			: std_logic_vector(5 downto 0)  := "000000";
+	constant ALU_NOP		: std_logic_vector(5 downto 0)  := "000000";
     constant ALU_CMPE       : std_logic_vector(5 downto 0)  := "000001";
     constant ALU_CMPG       : std_logic_vector(5 downto 0)  := "000010";
     constant ALU_CMPL       : std_logic_vector(5 downto 0)  := "000011";
     constant ALU_ASCII2BIN  : std_logic_vector(5 downto 0)  := "000100";
+	constant ALU_MOVACC2A 	: std_logic_vector(5 downto 0)  := "000101";
+	constant ALU_ADD		: std_logic_vector(5 downto 0) 	:= "000110";
+	constant ALU_SUBT		: std_logic_vector(5 downto 0)  := "000111";
+	constant ALU_SHIFTL		: std_logic_vector(5 downto 0)  := "001000";
 
     -- TYPE 2 INSTRUCTIONS
     constant TYPE_2         : std_logic_vector(1 downto 0)  := "01";
@@ -74,20 +80,22 @@ package INST_pkg is
     constant DST_IDX        : std_logic_vector(2 downto 0)  := "011";
     constant DST_MEM        : std_logic_vector(2 downto 0)  := "100";
     constant DST_IDX_MEM    : std_logic_vector(2 downto 0)  := "101";
+	constant DST_DMA		: std_logic_vector(2 downto 0)  := "110";
+	--constant DST_FQC		: std_logic_vector(2 downto 0)	:= "111";
 
  
     -- TYPE 4 INSTRUCTIONS
     constant TYPE_4         : std_logic_vector(1 downto 0)  := "11";
     constant SND            : std_logic_vector(1 downto 0)  := "00";
     constant RUN            : std_logic_vector(1 downto 0)  := "01";
-	constant DELAY		    : std_logic_vector(1 downto 0)  := "10";
+	constant FQ_CFG		    : std_logic_vector(1 downto 0)  := "10";
 
     --ALU operations
     TYPE alu_op_t IS (
       nop,                                  -- no operation
       op_lda, op_ldb, op_ldacc, op_ldid,    -- external value load
       op_mvacc2id, op_mvacc2a, op_mvacc2b,  -- internal load
-    --  op_add, op_sub, op_shiftl, op_shiftr, -- arithmetic operations
+      op_add, op_subt, op_shiftl, 					 -- arithmetic operations
     --  op_and, op_or, op_xor,                -- logic operations
       op_cmpe, op_cmpl, op_cmpg,            -- compare operations
       op_ascii2bin, -- op_bin2ascii,           -- conversion operations

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¾ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
 -- 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS CENTRAL PROCESSING UNIT
@@ -36,47 +36,47 @@ entity CPU is
         RAM_ADDR    : out std_logic_vector(7 downto 0);
         RAM_WRITE   : out std_logic;
         RAM_OE      : out std_logic;
+		RAM_READ_RDY : in std_logic;
 
         DMA_RQ      : in std_logic;
         DMA_READY   : in std_logic;
         DMA_ACK     : out std_logic;
         DMA_SEND    : out std_logic;
+		DMA_SCFG	: out std_logic;
 
         ALU_OP      : out alu_op_t;
-        INDEX_REG   : in  STD_LOGIC_VECTOR (7 downto 0);
+        INDEX_REG   : in std_logic_vector (7 downto 0);
         FLAG_Z      : in std_logic;
         FLAG_E      : in std_logic;
         
         COUNTER_START : out std_logic;
-        COUNTER_BUSY  : in std_logic;
-        COUNTER_RQ    : in std_logic;
-        COUNTER_ACK   : out std_logic;
-        --COUNTBUS    : in std_logic_vector(31 downto 0);
-        --COUNTER_SAVE_ACK : out std_logic;
-        --COUNTER_DONE_FLAG : in std_logic;
+        COUNTER_BUSY  : in std_logic_vector(1 downto 0);
         
         DATABUS     : inout std_logic_vector(7 downto 0);
         
-        -- Interrupciones
+        -- Interrupciones DMA
         DMA_INTERRUPT : in std_logic;
-        INTERRUPT_ACK : out std_logic
+        INTERRUPT_ACK : out std_logic;
+		
+		-- Config DMA
+		DMA_WR_EN 	: out std_logic
     );
 end CPU;
 
 architecture CPU_Behavior of CPU is
-    type states is (Idle, Fetch, OpFetch, Decode, Execute, Receive, Transmit, Interrupt, RunCounter, RdCounter);
+    type states is (Idle, Fetch, OpFetch, Decode, Execute, Receive, Transmit, Interrupt, RunCounter, RdCounter, SendConfig);
 	signal current_state, next_state: states;
 
 	signal pc_reg, ins_reg, tmp_reg: std_logic_vector(7 downto 0); -- CPU registers
 	signal pc, ins, tmp: std_logic_vector(7 downto 0); -- Combinational signals
 	signal pc_ctx_reg, ins_ctx_reg, tmp_ctx_reg : std_logic_vector(7 downto 0); --Registros para contexto de la CPU
-	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã‚Â³n a interrupciones
+	signal int_ack_flag : std_logic; -- Flag de atenciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n a interrupciones
 
 
     begin
         
         -- Processes
-        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST, COUNTER_RQ)
+        CPU_FSM : process(current_state, pc_reg, ins_reg, tmp_reg, int_ack_flag, FLAG_Z, INDEX_REG, DMA_RQ, DMA_READY, DMA_INTERRUPT, ROM_INST, RAM_READ_RDY)
             begin
                 -- Default combinational values
                 -- Program counter
@@ -90,11 +90,12 @@ architecture CPU_Behavior of CPU is
                 
                 DMA_ACK     <= '0';
                 DMA_SEND    <= '0';
+				DMA_SCFG 	<= '0';
+				DMA_WR_EN	<= '0';
 
                 ALU_OP      <= nop;
                 
                 COUNTER_START <= '0';
-                COUNTER_ACK <= '0';
 
                 ins <= ins_reg;
                 pc  <= pc_reg;
@@ -110,13 +111,9 @@ architecture CPU_Behavior of CPU is
                             
                         elsif DMA_INTERRUPT = '1' then
                             next_state <= Interrupt;
-                        
-                        elsif COUNTER_RQ = '1' then
-                            next_state <= RdCounter;
 
                         else
                             next_state <= Fetch;
-                        
                         end if;
 
                     when Receive =>
@@ -152,14 +149,19 @@ architecture CPU_Behavior of CPU is
                                 end if;
                             
                             when TYPE_4 => --11, peripheral operations
-                                if ins_reg(5 downto 3) = "00" then
-                                    next_state <= Transmit;
-                                else 
-                                    next_state <= RunCounter;
-                                end if;
+                                case ins_reg(5 downto 4) is
+								when SND =>
+									next_state <= Transmit;
+								when RUN =>
+									next_state <= RunCounter;
+								when FQ_CFG => 
+									next_state <= SendConfig;
+								when others =>
+									next_state <= Idle;
+							  end case;
                             
                             when others =>
-                            --    next_state <= Decode;
+                                -- next_state <= Decode;
                             
                         end case;
                     
@@ -183,7 +185,19 @@ architecture CPU_Behavior of CPU is
 
                                     when ALU_ASCII2BIN =>
                                         ALU_OP <= op_ascii2bin;
-                                        
+									
+									when ALU_ADD =>
+                                        ALU_OP <= op_add;
+									
+									when ALU_SUBT =>
+										ALU_OP <= op_subt;
+										
+									when ALU_MOVACC2A =>
+										ALU_OP <= op_mvacc2a;
+									
+									when ALU_SHIFTL	=>
+										ALU_OP <= op_shiftl;
+										
                                     when others =>
                                     
                                 end case;
@@ -233,49 +247,83 @@ architecture CPU_Behavior of CPU is
                                         when SRC_CONST & DST_ACC =>
                                             DATABUS <= tmp_reg;
                                             ALU_OP  <= op_ldacc;
+										
+										when SRC_CONST & DST_DMA =>
+											DATABUS <= tmp_reg;
+											DMA_WR_EN <= '1';
 
                                         -- External load: RAM to reg
                                         when SRC_MEM & DST_A =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_lda;
+										  if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_lda;
+											end if;
                                         
                                         when SRC_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldb;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldb;
+											end if;
                                         
                                         when SRC_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldid;
+											end if;
 
                                         when SRC_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldacc;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldacc;
+											end if;
+										  
+										when SRC_MEM & DST_DMA =>
+											RAM_ADDR 	<= tmp_reg;
+											RAM_OE		<= '0';
+											if RAM_READ_RDY = '1' then
+												DMA_WR_EN <= '1';
+											end if;
 
                                         -- External load: Indexed RAM to reg
                                         when SRC_IDX_MEM & DST_A =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_lda;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_lda;
+											end if;
                                         
                                         when SRC_IDX_MEM & DST_B =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldb;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldb;
+											end if;
                                         
                                         when SRC_IDX_MEM & DST_IDX =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldid;
+											end if;
 
                                         when SRC_IDX_MEM & DST_ACC =>
                                             RAM_ADDR <= tmp_reg + INDEX_REG;
                                             RAM_OE      <= '0';
-                                            ALU_OP      <= op_ldid;
-                                       
+                                            if RAM_READ_RDY = '1' then
+												ALU_OP      <= op_ldacc;
+											end if;
+										
+										when SRC_IDX_MEM & DST_DMA => 
+											RAM_ADDR 	<= tmp_reg + INDEX_REG;
+											RAM_OE 		<= '0';
+											if RAM_READ_RDY = '1' then
+												DMA_WR_EN <= '1';
+											end if;
+										
                                         when others =>
 
                                     end case;
@@ -296,20 +344,27 @@ architecture CPU_Behavior of CPU is
                                     RAM_WRITE <= '1';
 
                                 end if;
-                                next_state <= Idle;
+								
+								if ins_reg(4) = '1' and RAM_READ_RDY = '0' then
+									next_state <= Execute; --Mantengo la ejecuciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n un ciclo extra si la operaciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n es de lectura para que la ALU pille el databus
+								else
+									next_state <= Idle;
+								end if;
 
-                        when TYPE_4 => --Peripheral operations and extras (delay)
-                            case ins_reg(5 downto 4) is
-                                when SND =>
-                                    next_state <= Transmit;
-                                when RUN =>
-                                    next_state <= RunCounter;
-                                when others =>
-                                    next_state <= Idle;
-                            end case;
+                        --when TYPE_4 => --Peripheral operations and extras
+                            --case ins_reg(5 downto 4) is
+                                --when SND =>
+                                    --next_state <= Transmit;
+                                --when RUN =>
+                                    --next_state <= RunCounter;
+								 --when FQ_CFG => 
+									--next_state <= SendConfig;
+                                --when others =>
+                                    --next_state <= Idle;
+                            --end case;
                             
                         when others =>
-                        
+							next_state <= Idle;
                         end case;
                     
                     when Transmit =>
@@ -319,7 +374,20 @@ architecture CPU_Behavior of CPU is
                         else
                             next_state <= Transmit;
                         end if;
-                        
+						
+					when SendConfig =>
+						DMA_SCFG <= '1';
+						
+						if DMA_RQ = '1' then
+							DMA_ACK <= '1'; -- Concedo los buses
+						end if;
+						
+						if DMA_READY = '1' then
+							next_state <= Idle; 
+                        else
+							next_state <= SendConfig;
+						end if;
+						
                     when Interrupt =>
                         if int_ack_flag = '1' then  
                             --INTERRUPT_ACK <= '1';
@@ -335,15 +403,9 @@ architecture CPU_Behavior of CPU is
                     when RunCounter =>
                         COUNTER_START <= '1';
                         next_state <= Idle;
-                        
-                    when RdCounter =>
-                        COUNTER_ACK <= '1';
-                        if COUNTER_RQ = '0' then
-                            next_state <= Idle;
-                        else
-                            next_state <= RdCounter;
-                        end if;    
+                       
                     when others =>
+						next_state <= Idle;
 
                 end case;
                 

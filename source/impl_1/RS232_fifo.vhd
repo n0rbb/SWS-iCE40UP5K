@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÍNGUEZ
+-- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
 -- 
 -- Create Date: 25.06.2025 12:05:27
 -- Design Name: RS232-FIFO Memory module
@@ -42,7 +42,7 @@ end RS232_fifo;
 
 architecture Fifo_Behaviour of RS232_fifo is
 	signal count : unsigned(2 downto 0);
-	signal contents_fifo : array8_ram(3 downto 0);
+	signal contents_fifo : array8_regs(3 downto 0);
 	signal write_ptr, read_ptr : unsigned(1 downto 0);
 	signal full_s, empty_s : std_logic;
 	begin 
