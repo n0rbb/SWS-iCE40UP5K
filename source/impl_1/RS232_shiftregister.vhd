@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÍNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 22.04.2025 09:19:45
 -- Design Name: SWS RS232 SHIFT REGISTER
 -- Module Name: RS232_shiftregister - SR_Behavior

@@ -1,8 +1,28 @@
+----------------------------------------------------------------------------------
+-- Engineer: MARIO DE MIGUEL 
+-- Create Date: 21.09.2025 14:12:17
+-- Design Name: SWS COUNTER INTERFACE
+-- Module Name: FQC_top - FQC_behavior
+-- Project Name: SPIN-WAVE SENSOR - SIGNAL ACQUISITION UNIT
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.MEM_PKG.all;
---Unidad de control de los contadores
+-- Counter control unit
 
 
 entity FQC_top is
@@ -50,7 +70,11 @@ architecture FQC_Behavior of FQC_top is
 			ENABLE : in std_logic;
 			CLEAR : in std_logic;
 			
-			TARGET_REG : in std_logic_vector(7 downto 0);
+			TARGET : in std_logic_vector(7 downto 0);
+			TARGET_UPDATE : in std_logic;
+			TARGET_UPDATE_ACK : out std_logic;
+			
+			COUNTER_READ : in std_logic;
 			
 			--READY : out std_logic;
 			COUNT_ACK : in std_logic;
@@ -80,9 +104,16 @@ architecture FQC_Behavior of FQC_top is
 	
 	signal counter_status_r : std_logic_vector(1 downto 0); --Registro que indica qu contadores estn funcionando
 	
+	signal counter_read, counter_read1, counter_read2 : std_logic;
+	
 	signal bytecounter_sv : unsigned(2 downto 0);
 	
 	signal fqc_regs : array8_regs(3 downto 0);
+	signal target_update : std_logic;
+	signal target_update1_ack : std_logic;
+	signal target_update2_ack : std_logic;
+	signal target_update1_ack_r1, target_update1_ack_r2 : std_logic;
+	signal target_update2_ack_r1, target_update2_ack_r2 : std_logic;
 	
 	-- 00 STATUS REG
 	-- 01 ARM REG
@@ -105,7 +136,11 @@ architecture FQC_Behavior of FQC_top is
 				FAST_CLK_PORT 	=> clk_120_mhz,
 				INPUT 			=> INPUT(0),
 				
-				TARGET_REG       => fqc_regs(2),
+				TARGET       => fqc_regs(2),
+				TARGET_UPDATE 	=> target_update,
+				TARGET_UPDATE_ACK => target_update1_ack,
+				
+				COUNTER_READ 	=> counter_read1,
 				
 				CLEAR 			=> count_clear1,
 				ENABLE 			=> count_enable1,
@@ -120,7 +155,11 @@ architecture FQC_Behavior of FQC_top is
 				FAST_CLK_PORT	=> clk_120_mhz,
 				INPUT			=> INPUT(1),
 				
-				TARGET_REG		=> fqc_regs(3),
+				TARGET		=> fqc_regs(3),
+				TARGET_UPDATE 	=> target_update,
+				TARGET_UPDATE_ACK => target_update2_ack,
+				
+				COUNTER_READ 	=> counter_read2,
 				
 				CLEAR			=> count_clear2,
 				ENABLE 			=> count_enable2,
@@ -134,7 +173,7 @@ architecture FQC_Behavior of FQC_top is
 		COUNT_RDY <= count_ready;
 		
 		--ANDs to operate ONLY the armed counters
-		count_clear1 <= count_clear and fqc_regs(1)(0) and counter_sel_r(0); --AÃ±adir counter_selected para no resetear indebidamente los otros contadores
+		count_clear1 <= count_clear and fqc_regs(1)(0) and counter_sel_r(0); --AÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±adir counter_selected para no resetear indebidamente los otros contadores
 		count_enable1 <= count_enable and fqc_regs(1)(0);
 		
 		count_clear2 <= count_clear and fqc_regs(1)(1) and counter_sel_r(1);
@@ -142,6 +181,10 @@ architecture FQC_Behavior of FQC_top is
 	
 		counter_ack1 <= counter_ack and counter_sel_r(0);
 		counter_ack2 <= counter_ack and counter_sel_r(1);
+		
+		counter_read1 <= counter_read and counter_sel_r(0);
+		counter_read2 <= counter_read and counter_sel_r(1);
+		
 		
 		CTR_TOP_CDC : process(CLK_PORT) -- The same as in the freq counters, we synchronise incoming singnals
 		begin
@@ -152,6 +195,12 @@ architecture FQC_Behavior of FQC_top is
 				counter_rdy2_sync_r1 <= counter_ready2;
 				counter_rdy2_sync_r2 <= counter_rdy2_sync_r1;
 				
+				target_update1_ack_r1 <= target_update1_ack;
+				target_update1_ack_r2 <= target_update1_ack_r1;
+				
+				target_update2_ack_r1 <= target_update2_ack;
+				target_update2_ack_r2 <= target_update2_ack_r1;
+				
 			end if;
 		
 		end process CTR_TOP_CDC;
@@ -161,7 +210,7 @@ architecture FQC_Behavior of FQC_top is
 			COUNT_OUT <= (others => '0');
             count_clear <= '0';
             count_enable <= '0';
-			
+			counter_read <= '0';
 			
             case current_state is
                 when Idle =>
@@ -182,6 +231,7 @@ architecture FQC_Behavior of FQC_top is
 					next_state <= Idle;
 				
                 when ReadCounter =>
+					counter_read <= '1';
 					if counter_ack = '1' then
                         next_state <= Idle;
                     else
@@ -237,10 +287,20 @@ architecture FQC_Behavior of FQC_top is
 						--counter_sel_r <= X"01";
 						counter_ack <= '0';
 						bytecounter_sv <= "000";
-						
 						if COUNT_WR_EN = '1' then
 							fqc_regs(to_integer(unsigned(REG_ADDR))) <= CFG_BUS;
+							target_update <= '1';
 						end if;
+						if target_update1_ack_r2 = '1' and target_update2_ack_r2 = '1' then
+							target_update <= '0';
+						end if;
+						
+						-- Read selection mux
+							if counter_ready1 = '1' then
+								counter_sel_r <= X"01";
+							elsif counter_ready2 = '1' and counter_ready1 = '0' then
+								counter_sel_r <= X"02";
+							end if;
 						
 						
                     when RunCounter => -- Nuthin'
@@ -248,19 +308,17 @@ architecture FQC_Behavior of FQC_top is
                     
 					when ReadCounter =>
 						if counter_ack = '0' then
-							-- Read selection mux
-							if counter_ready1 = '1' then
-								counter_sel_r <= X"01";
-							elsif counter_ready2 = '1' and counter_ready1 = '0' then
-								counter_sel_r <= X"02";
-							end if;
-							count_r1 <= count(7 downto 0);  --Leo la cuenta y la guardo en registros
-							count_r2 <= count(15 downto 8);
-							count_r3 <= count(23 downto 16);
-							count_r4 <= count(31 downto 24);
 							
-							counter_ack <= '1'; --Paso el handshake
-							count_ready <= '1'; --Aviso a la DMA
+							
+							if counter_read = '1' then
+								count_r1 <= count(7 downto 0);  --Leo la cuenta y la guardo en registros
+								count_r2 <= count(15 downto 8);
+								count_r3 <= count(23 downto 16);
+								count_r4 <= count(31 downto 24);
+							
+								counter_ack <= '1'; --Paso el handshake
+								count_ready <= '1'; --Aviso a la DMA
+							end if;
 						end if;
 						
 					when SendDma =>

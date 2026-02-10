@@ -1,8 +1,6 @@
 
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL 
 -- Create Date: 21.04.2025 12:23:02
 -- Design Name: SPIN-WAVE SENSOR SPARTAN TOP
 -- Module Name: SWS_top - SWS_top_Behavior
@@ -132,7 +130,7 @@ architecture SWS_top_Behavior of SWS_top is
 			wr_en_i		: in std_logic;
 			clk_en_i	: in std_logic;
 			
-			addr_i 		: in std_logic_vector(5 downto 0);
+			addr_i 		: in std_logic_vector(4 downto 0);
 			wr_data_i	: in std_logic_vector(7 downto 0);
 			rd_data_o	: out std_logic_vector(7 downto 0)
 		);
@@ -200,15 +198,6 @@ architecture SWS_top_Behavior of SWS_top is
 	
 	
 	--Frequency counters
-    --component FQCLK is
-		--port(
-			--ref_clk_i: in std_logic;
-			--rst_n_i: in std_logic;
-			--outcore_o: out std_logic;
-			--outglobal_o: out std_logic
-		--);
-	--end component;
-
     
     component FQC_top is 
         port ( 
@@ -393,7 +382,7 @@ architecture SWS_top_Behavior of SWS_top is
 				wr_en_i		=> write_en,
 				clk_en_i	=> ram_clk_en,
 				
-				addr_i		=> ADDRESS(5 downto 0),
+				addr_i		=> ADDRESS(4 downto 0),
 				wr_data_i	=> write_data,
 				rd_data_o	=> read_data
 			);
@@ -461,13 +450,6 @@ architecture SWS_top_Behavior of SWS_top is
 				--outcore_o      => clk_120_mhz_core,
 				--outglobal_o    => clk_120_mhz
 			--);
-        --FC_MCMM : MCMM_Counters 
-            --port map(
-                --reset       => init,
-                --clk_in1     => CLK_PORT,
-                --FAST_CLK_OUT => clk_120_mhz,
-                --locked      => locked
-            --);
             
         FC0_CP : FQC_top
             port map(

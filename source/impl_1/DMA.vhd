@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMINGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL 
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS DIRECT MEMORY ACCESS MODULE
 -- Module Name: DMA - DMA_Behavior
@@ -49,7 +47,7 @@ entity DMA is
 
         DMA_ACK 	: in std_logic;
         SEND_COMM 	: in std_logic;
-		SEND_CONF	: in std_logic; --SeÃƒÆ’Ã‚Â±al de control de la CPU para configurar el perifÃƒÆ’Ã‚Â©rico. 
+		SEND_CONF	: in std_logic; -- Control signal to update peripheral config
         DMA_RQ 		: out std_logic;
         READY 		: out std_logic;
 		
@@ -77,7 +75,7 @@ architecture DMA_Behavior of DMA is
     signal byte_counter_rx, byte_counter_tx : unsigned(2 downto 0);
 	signal byte_counter_fq	: unsigned(2 downto 0);
 	signal ctr_addr_offset : unsigned(7 downto 0);
-	--signal tmp_reg : std_logic_vector(7 downto 0); --AquÃƒÆ’Ã‚Â­ voy a capturar el address. 
+	--signal tmp_reg : std_logic_vector(7 downto 0);  
    
     signal bytes2send_cfg_reg : unsigned(7 downto 0);
 	begin
@@ -106,9 +104,9 @@ architecture DMA_Behavior of DMA is
                             READY <= '1';
                         end if;
 
-                        DATABUS     <= (others => 'Z'); --Pongo en alta impedancia para que la RAM haga lo suyo mientras
+                        DATABUS     <= (others => 'Z'); -- High impedance while RAM's doing its job
 
-                        if RX_EMPTY = '0' then  --Cuando llega algo a la fifo, se escribe a la RAM
+                        if RX_EMPTY = '0' then  --As soon as RS232 stores a command on the FIFO, send it to RAM
                             next_state <= ReadFifo;
 
                         elsif SEND_COMM = '1' then
@@ -125,9 +123,9 @@ architecture DMA_Behavior of DMA is
 
                         end if;
 
-                    -- TAREAS DE ESCRITURA EN LA RAM
-					-- TAREA DE ATENCIÃƒÆ’Ã¢â‚¬Å“N AL RS-232
-                    when ReadFifo => --Lectura del dato de la fifo (pongo el dato en RCVD_Data al disparar la fifo)
+                    -- RAM WRITING TASKS
+					-- RS232 management
+                    when ReadFifo => -- Read byte from FIFO (Put it on RCVD_Data))
                         DATA_READ   <= '1';
                         VALID_D     <= '1';
 
@@ -142,13 +140,13 @@ architecture DMA_Behavior of DMA is
 
                         DATABUS     <= (others => 'Z');
            
-                        if DMA_ACK = '1' then --Solo cuando me han concedido los buses, leo y paso a la escritura. Si no, me quedo iterando.
+                        if DMA_ACK = '1' then --Stall until CPU allows me to write to RAM 
                             next_state <= WriteRam;
                         else
-                            next_state <= ReadFifo; --Me parece que aquÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ no va a pasar nada hasta que cambie dma ack
+                            next_state <= ReadFifo; 
                         end if;
 
-                    when WriteRam => --Pongo address, write_en y dato del registro en el databus
+                    when WriteRam => -- Set address, wr_en and place data on databus
                         DATA_READ   <= '0';
                         VALID_D     <= '1';
 						
@@ -174,12 +172,12 @@ architecture DMA_Behavior of DMA is
                         if byte_counter_rx = 0 then
                             next_state   <= Idle;
                         elsif byte_counter_rx = 1 then
-                            next_state   <= Idle; --Cambiar por idle 
+                            next_state   <= Idle; 
                         else
                             next_state   <= EndWrite;
                         end if;
 
-                    when EndWrite => --Escribe FF en la direccion NEW_INST y genero la interrupciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n
+                    when EndWrite => -- Launch interrupt to CPU to parse command 
                         
                         DMA_INTERRUPT <= '1';
                         
@@ -198,13 +196,13 @@ architecture DMA_Behavior of DMA is
             
                         DATABUS <= (others => 'Z');
 
-                        if INTERRUPT_ACK = '0' then --ESPERAR A QUE SE CERTIFIQUE LA ATENCIÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œN A LA INTERRUPCIÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œN
+                        if INTERRUPT_ACK = '0' then -- Wait until CPU acks the interrupt
                             next_state <= EndWrite;
                         else 
-                            next_state <= Idle; --CAMBIAR A IDLE CUANDO ESTÃƒÆ’Ã‚Â TODO EN ORDEN
+                            next_state <= Idle; 
                         end if;
 						
-					-- TAREA DE ESCRITURA DE LOS DATOS DE CUENTA
+					-- Count data writing task
 					when RequestFQC =>
 					    DATA_READ   <= '0';
                         VALID_D     <= '1';
@@ -221,11 +219,11 @@ architecture DMA_Behavior of DMA is
                         DATABUS     <= (others => 'Z');
 						
 					   if DMA_ACK = '1' then 
-							  COUNT_READ	<= '1'; -- Subo esto un flanco antes para que el gestor de contadores cambie de estado a la vez que la dma
+							 COUNT_READ	<= '1'; -- This signal is triggered one cycle earlier than it should so that counter manager changes state at the same time as the DMA
                              next_state <= WriteRamFQC;
                         else
-						      COUNT_READ	<= '0';
-                             next_state <= RequestFQC; --Me parece que aqu­ no va a pasar nada hasta que cambie dma ack
+						     COUNT_READ	<= '0';
+                             next_state <= RequestFQC; -- Nothing happens here until DMA_ACK is OK
                         end if;
 					
 					when WriteRamFQC =>
@@ -251,13 +249,14 @@ architecture DMA_Behavior of DMA is
 						
 						
 						if byte_counter_fq < 4 then 
-							next_state <= WriteRamFQC; -- Necesito subir y bajar wr_en para leer correctamente los bytes de cuenta
+							next_state <= WriteRamFQC; -- I need to enable and disable wr_en to write the count bytes correctly
 						else
 							next_state <= Idle;
 						end if;
 
-                    -- FIN DE LA TAREA DE ESCRITURA EN RAM. TAREA DE LECTURA DE LA RAM.
-                    when Waiting =>  --Estado para comprobar cÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³mo estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ el transmisor y preparar la lectura RAM
+                    -- END OF RAM WRITING TASKS. RAM READING TASKS.
+					
+                    when Waiting =>  -- Wait for transmitter to be idle and prepare RAM reading
                         DATA_READ <= '0';
                         VALID_D <= '1';
 
@@ -280,8 +279,8 @@ architecture DMA_Behavior of DMA is
                             next_state <= ReleaseDma;
                         end if;
 
-                    when LoadTransmitter => --Ordena la lectura un dato de la memoria al registro de la DMA
-                        --Escojo ahora el address y disparo la lectura
+                    when LoadTransmitter => -- Orders a RAM reading and loads data to transmitter register
+                        -- Pick address and trigger reading
                         VALID_D <= '1';
                         DATA_READ <= '0';
                         
@@ -295,9 +294,9 @@ architecture DMA_Behavior of DMA is
                             when "010" =>
                                 ADDRESS <= DMA_TX_BUFFER_MI2;
                             when "011" =>
-                                ADDRESS <= DMA_TX_BUFFER_LSB; --Esto pilla para 1 y 2
+                                ADDRESS <= DMA_TX_BUFFER_LSB; 
                             when others =>
-                                ADDRESS <= (others => '0'); -- Me libro de este latch
+                                ADDRESS <= (others => '0'); -- We go latch-free
                         end case;
 
                         OE <= '0';
@@ -308,17 +307,17 @@ architecture DMA_Behavior of DMA is
             
                         DATABUS <= (others => 'Z');
 						
-						if DMA_READ_RDY = '1' then --Atasco el estado hasta que sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© que la RAM puso el dato en el databus
+						if DMA_READ_RDY = '1' then -- Stall the DMA until RAM delivers the data to the databus
 							next_state <= SendTransmitter;
 						else
 							next_state <= LoadTransmitter;
 						end if;
          
-                    when SendTransmitter => --Comprueba si el transmisor estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ ready y manda los datos del registro 
-                        VALID_D <= '0'; --Disparo el transmisor.
+                    when SendTransmitter => -- Checks if transmitter is ready and load data to its registers
+                        VALID_D <= '0'; -- Fire transmitter
                         DATA_READ <= '0';
 						
-					   COUNT_READ <= '0';
+					    COUNT_READ <= '0';
 
                         ADDRESS <= (others => '0');
                         OE <= '1';
@@ -405,7 +404,7 @@ architecture DMA_Behavior of DMA is
 							when "011" => 
 								COUNT_REG_ADDR <= "11";
 							when others =>
-								COUNT_REG_ADDR <= "01"; -- Nunca escribo en 00. 
+								COUNT_REG_ADDR <= "01"; -- Never write to 00. 
 						end case;
 						
 						if (byte_counter_tx < bytes2send_cfg_reg) then
@@ -428,14 +427,14 @@ architecture DMA_Behavior of DMA is
 				   ctr_addr_offset <= (others => '0'); 
 				   COUNT_CFG <= (others => '0');
                     TX_DATA <= (others => '0');
-				   bytes2send_cfg_reg <= X"02"; -- Por defecto dos bytes
+				   bytes2send_cfg_reg <= X"02"; -- 2 byte default
                     current_state <= Idle;
         
                     elsif CLK_PORT'event and CLK_PORT = '1' then
                     case current_state is
                         when Idle =>
                             TX_DATA <= (others => '0');
-							byte_counter_fq <= "000"; --LO HAGO AQUÃ PORQUE NO HAY UN END-STATE PER SE PARA LA RUTINA DE ESCRITURA DEL CONTADOR EN RAM
+							byte_counter_fq <= "000"; -- I set it here as RAM-Writing tasks have no such thing as an end-state
 							
 							if WRITE_CFG_EN = '1' then
 								bytes2send_cfg_reg <= unsigned(DATABUS);
@@ -461,7 +460,7 @@ architecture DMA_Behavior of DMA is
 							byte_counter_fq <= byte_counter_fq + 1;
 							
 						
-                        when Waiting => --NO TOCAMOS EL DATO DEL TRANSMISOR
+                        when Waiting => -- Don't touch transmitter data
 
             
                         when LoadTransmitter =>
@@ -472,7 +471,7 @@ architecture DMA_Behavior of DMA is
                         --    if (byte_counter_tx < 2) then   --If byte_counter_tx = 0
                         --        byte_counter_tx <= byte_counter_tx + 1;   
                         --    else
-                        --        byte_counter_tx <= 0; --No deberamos llegar nunca
+                        --        byte_counter_tx <= 0;
                         --    end if;
                
                         when SendTransmitter => 

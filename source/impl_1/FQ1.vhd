@@ -1,3 +1,23 @@
+----------------------------------------------------------------------------------
+-- Engineer: MARIO DE MIGUEL 
+-- Create Date: 21.12.2025 14:12:17
+-- Design Name: SWS COUNTER INSTANCE
+-- Module Name: FQ1 - Count_Me_Up 
+-- Project Name: SPIN-WAVE SENSOR - SIGNAL ACQUISITION UNIT
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -13,11 +33,14 @@ port(
 	ENABLE : in std_logic;
 	CLEAR : in std_logic;
 	
-	TARGET_REG : in std_logic_vector(7 downto 0);
+	TARGET : in std_logic_vector(7 downto 0);
+	TARGET_UPDATE : in std_logic;
+	TARGET_UPDATE_ACK : out std_logic;
 	
 	--READY : out std_logic;
 	COUNT_ACK : in std_logic;
 	COUNTER_RDY : out std_logic;
+	COUNTER_READ : in std_logic;
 	
 	COUNT : out std_logic_vector(31 downto 0)
 );
@@ -29,6 +52,7 @@ type states is (Idle, Sync, Busy, Done);
 signal current_state, next_state : states;
 
 signal busy_flag, busy_flag_reg1, busy_flag_reg2, busy_flag_reg3, busy_flag_reg4 : std_logic; --4 Staged
+signal start_counter : std_logic;
 signal sync_flag, sync_flag_reg : std_logic;
 
 signal count_r : std_logic_vector(31 downto 0);
@@ -41,22 +65,26 @@ signal count_mid1_carry, count_mid2_carry, count_high_carry : unsigned(0 downto 
 signal elapsed_periods : unsigned(7 downto 0);
 
 signal count_clear_sync_r1, count_clear_sync_r2 : std_logic;
-signal count_clear_buf : std_logic;
+signal count_clear_reg1, count_clear_reg2, count_clear_reg3 : std_logic; --3 Staged
 signal count_enable_sync_r1, count_enable_sync_r2 : std_logic;
 
+signal count_read_sync_r1, count_read_sync_r2 : std_logic;
 
-signal target_sync_r1, target_sync_r2 : unsigned(7 downto 0);
+--signal target_sync_r1, target_sync_r2 : unsigned(7 downto 0);
+signal target_reg : unsigned(7 downto 0);
+signal target_update_r1, target_update_r2 : std_logic;
+signal target_update_ack_r : std_logic;
 signal target_reached, target_reached_h1, target_reached_h2 : std_logic;
 
 signal count_ack_sync_r1, count_ack_sync_r2 : std_logic;
 
 
 --Some directives for synthesis
---attribute dont_touch : string;
---attribute dont_touch of count_high : signal is "true";
---attribute dont_touch of count_mid2 : signal is "true";
---attribute dont_touch of count_mid1 : signal is "true";
---attribute dont_touch of count_low  : signal is "true";
+attribute dont_touch : string;
+attribute dont_touch of count_high : signal is "true";
+attribute dont_touch of count_mid2 : signal is "true";
+attribute dont_touch of count_mid1 : signal is "true";
+attribute dont_touch of count_low  : signal is "true";
 
 --attribute dont_touch of busy_flag_reg1 : signal is "true";
 --attribute dont_touch of busy_flag_reg2 : signal is "true";
@@ -76,8 +104,12 @@ begin
 				count_clear_sync_r1 <= '0';
 				count_clear_sync_r2 <= '0';
 				
-				target_sync_r1 <= to_unsigned(100, 8);
-				target_sync_r2 <= to_unsigned(100, 8);
+				target_reg <= to_unsigned(100, 8);
+				--target_sync_r2 <= to_unsigned(100, 8);
+				target_update_ack_r <= '0';
+				
+				target_update_r1 <= '0';
+				target_update_r2 <= '0';
 				
 			
 			elsif FAST_CLK_PORT'event and FAST_CLK_PORT = '1' then
@@ -90,14 +122,25 @@ begin
 				count_ack_sync_r1 <= COUNT_ACK;
 				count_ack_sync_r2 <= count_ack_sync_r1;
 				
-				target_sync_r1 <= unsigned(TARGET_REG);
-				target_sync_r2 <= target_sync_r1;
+				--target_sync_r1 <= unsigned(TARGET_REG);
+				
+				-- Update targets
+				target_update_r1 <= TARGET_UPDATE;
+				target_update_r2 <= target_update_r1;
+				
+				if target_update_r2 = '1' and target_update_ack_r = '0' then
+					target_reg <= unsigned(TARGET);
+					target_update_ack_r <= '1';
+				elsif target_update_r2 = '0' and target_update_ack_r = '1' then
+					target_update_ack_r <= '0';
+				end if;
 				
             end if;
 		end process CTR_CDC;
 
-		CTR_FSM : process(current_state, count_enable_sync_r2, count_ack_sync_r2, elapsed_periods, count_r, target_reached)
+		CTR_FSM : process(current_state, count_read_sync_r2, count_enable_sync_r2, count_ack_sync_r2, elapsed_periods, count_r, target_reached, target_update_ack_r)
 		begin
+			TARGET_UPDATE_ACK <= target_update_ack_r;
 			busy_flag <= '0';
 			sync_flag <= '0';
 			case current_state is 
@@ -133,7 +176,13 @@ begin
 				
 				when Done => 
 					COUNTER_RDY <= '1';
-					COUNT <= count_r;
+					
+					if count_read_sync_r2 = '1' then 
+						COUNT <= count_r;
+					else
+						COUNT <= (others => 'Z');
+					end if;
+					
 					if count_ack_sync_r2 = '1' then
 						next_state <= Idle;
 					else
@@ -171,6 +220,9 @@ begin
 				
 				sync_flag_reg <= '0';
 				
+				count_read_sync_r1 <= '0';
+				count_read_sync_r2 <= '0';
+				
 				target_reached <= '0';
 				target_reached_h1 <= '0';
 				target_reached_h2 <= '0';
@@ -179,29 +231,33 @@ begin
 				if count_clear_sync_r2 = '1' then
 					--count_sg <= (others => '0');
 					count_low <= (others => '0');
-					count_mid1 <= (others => '0');
-					
 					count_low_done <= '0';
-					count_mid1_done <= '0';
-					
 					count_mid1_carry <= "0";
+					
+				end if;	
+				
+				if count_clear_reg1 = '1' then
+					count_mid1 <= (others => '0');
+					count_mid1_done <= '0';
 					count_mid2_carry <= "0";
 					
 				end if;	
 				
-				if count_clear_buf = '1' then
+				if count_clear_reg2 = '1' then
 					count_mid2 <= (others => '0');
-					count_high <= (others => '0');
-					
 					count_mid2_done <= '0';
 					count_high_carry <= "0";
+				end if;
+				
+				if count_clear_reg3 = '1' then
+					count_high <= (others => '0');
 					
 					target_reached <= '0';
 					target_reached_h1 <= '0';
 					target_reached_h2 <= '0';
 				end if;
 				
-				if busy_flag_reg1 = '1' and busy_flag_reg3 = '1' then --Force 2 clock cycle delay on start for the count to end correctly when target is reached
+				if busy_flag_reg1 = '1' and start_counter = '1' then --Force 2 clock cycle delay on start for the count to end correctly when target is reached
 					--count_sg <= count_sg + 1;
 					count_low <= count_low + 1; -- Update low counter
 					
@@ -245,13 +301,13 @@ begin
 					count_high <= count_high + count_high_carry; --Update high_counter
 					
 				-- Target checking management
-					if elapsed_periods(3 downto 0) > target_sync_r2(3 downto 0) then
+					if elapsed_periods(3 downto 0) > target_reg(3 downto 0) then
 						target_reached_h1 <= '1';
 					else
 						target_reached_h1 <= '0';
 					end if;	
 					
-					if elapsed_periods(7 downto 4) = target_sync_r2(7 downto 4) then
+					if elapsed_periods(7 downto 4) = target_reg(7 downto 4) then
 						target_reached_h2 <= '1';
 					else
 						target_reached_h2 <= '0';
@@ -277,7 +333,15 @@ begin
 				busy_flag_reg3 <= busy_flag_reg2;
 				busy_flag_reg4 <= busy_flag_reg3;
 				sync_flag_reg <= sync_flag;
-				count_clear_buf <= count_clear_sync_r2;
+				
+				start_counter <= busy_flag_reg2;
+				
+				count_clear_reg1 <= count_clear_sync_r2;
+				count_clear_reg2 <= count_clear_reg1;
+				count_clear_reg3 <= count_clear_reg2;
+				
+				count_read_sync_r1 <= COUNTER_READ;
+				count_read_sync_r2 <= count_read_sync_r1;
 				
 			end if;
         end process CTR_Count;

@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÍNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 22.04.2025 09:19:45
 -- Design Name: SWS RS232 TRANSMITTER MODULE
 -- Module Name: RS232_transmitter - Transmitter_Behavior
@@ -46,7 +44,7 @@ architecture Transmitter_Behavior of RS232_transmitter is
     signal pulse_count : unsigned(7 downto 0);
 
     -- Constants
-    constant pulse_width : unsigned(7 downto 0) := to_unsigned(104, 8);  --868 ciclos para 100 MHz, 173 para 20 MHz, 104 para 12 MHz
+    constant pulse_width : unsigned(7 downto 0) := to_unsigned(104, 8);  --868 cycles for 100 MHz, 173 for 20 MHz, 104 for 12 MHz
     
     
     begin
@@ -123,7 +121,7 @@ architecture Transmitter_Behavior of RS232_transmitter is
                         when SendData =>
                             if (pulse_count = pulse_width) then
                                 pulse_count <= (others => '0');
-                                if (data_count = 8) then  --Creo que esto se puede quitar (no se debería llegar aquí nunca)
+                                if (data_count = 8) then  --One should never reach this
                                     data_count <= (others => '0');
                                 else
                                     data_count <= data_count + 1;

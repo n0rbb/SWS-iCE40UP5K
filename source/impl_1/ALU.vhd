@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã‚ÂNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 23.04.2025 11:29:38
 -- Design Name: ARITHMETIC - LOGIC UNIT
 -- Module Name: ALU - ALU_Behavior
@@ -46,7 +44,7 @@ architecture ALU_Behavior of ALU is
      signal flag_zero, flag_err                   : std_logic;
      signal flag_zero_reg, flag_err_reg           : std_logic;
      
-     -- Registros para guardar y recuperar el contexto de la ALU
+     -- Regs to store context of ALU
      signal a_ctx_r, b_ctx_r, acc_ctx_r, index_r_ctx_r : std_logic_vector(7 downto 0);
      signal flag_zero_ctx_r, flag_err_ctx_r       : std_logic;
 
@@ -94,7 +92,7 @@ architecture ALU_Behavior of ALU is
                               index_r <= acc_reg;
     
                          when op_cmpe =>
-                              if unsigned(a_reg) = unsigned(b_reg) then --Probar a cargar la resta en el acumulador y tirar el flag de ahÃƒÆ’Ã‚Â­!
+                              if unsigned(a_reg) = unsigned(b_reg) then --Probar a cargar la resta en el acumulador y tirar el flag de ahÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­!
                                    flag_zero <= '1';
                               else
                                    flag_zero <= '0';
@@ -116,7 +114,7 @@ architecture ALU_Behavior of ALU is
                         
                          when op_ascii2bin =>
                               acc <= std_logic_vector(unsigned(a_reg) - ASCII0);
-                              if(unsigned(acc) > 9) then --AquÃ­ compruebo inmediatamente el acumulador y no el registro
+                              if(unsigned(acc) > 9) then --Check acc instead of register
                                    flag_err <= '1';
                               else
                                    flag_err <= '0';
