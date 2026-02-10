@@ -20,7 +20,7 @@ architecture Testbench of tb_iCE40_SWS_Config is
     
             
             -- Frequency input
-            FQ_IN             : in std_logic
+            FQ_IN             : in std_logic_vector(1 downto 0)
         );
     end component;
 
@@ -33,7 +33,7 @@ architecture Testbench of tb_iCE40_SWS_Config is
     signal td           : std_logic;
 	signal rd		   : std_logic;
 	--Frequency Mock
-    signal fq_mock      : std_logic;
+    signal fq_mock      : std_logic_vector(1 downto 0);
 
     constant clkperiod  : time := 83.33 ns; --12 MHz clock frequency
     constant signalperiod : time := 500 ns; --2 MHz mock signal frequency
@@ -43,7 +43,7 @@ architecture Testbench of tb_iCE40_SWS_Config is
         -- Component mapping
         Sensor_UT : iCE40_SWS
             port map(
-                --CLK_SOURCE      => clk12mhz, --Uncomment when simulating with external oscillator
+                CLK_SOURCE      => clk12mhz, --Uncomment when simulating with external oscillator
                 BTN             => btn_signal,
                 
                 UART_RX         => rd,
@@ -69,9 +69,9 @@ architecture Testbench of tb_iCE40_SWS_Config is
         
         Frequency_Mock : process
             begin
-                fq_mock <= '0';
+                fq_mock(0) <= '0';
                 wait for signalperiod/2;
-                fq_mock <= '1';
+                fq_mock(0) <= '1';
                 wait for signalperiod/2;
         end process Frequency_Mock;
 		

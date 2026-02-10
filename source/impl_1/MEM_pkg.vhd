@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 23.04.2025 10:55:57
 -- Design Name: SWS_RAM ADDRESS PACKAGE
 -- Module Name: SWS_pkg - Behavioral

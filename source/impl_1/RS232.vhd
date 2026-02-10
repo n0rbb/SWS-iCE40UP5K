@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO - UNIVERSIDAD COMPLUTENSE DE MADRID
--- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 21.04.2025 14:12:17
 -- Design Name: SWS UART RS232 INTERFACE 
 -- Module Name: RS232 - RS232_Behavior

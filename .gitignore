@@ -1,7 +1,7 @@
 #Ignore everything
 /*
 !.gitignore
-
+!README.md
 
 #IPs
 !FQCLK/

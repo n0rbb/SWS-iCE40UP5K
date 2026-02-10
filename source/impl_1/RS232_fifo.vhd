@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: INSTITUTO DE MAGNETISMO APLICADO
--- Engineer: MARIO DE MIGUEL DOMÃNGUEZ
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 25.06.2025 12:05:27
 -- Design Name: RS232-FIFO Memory module
 -- Module Name: RS232_fifo - FIFO_behavior
@@ -87,7 +85,7 @@ architecture Fifo_Behaviour of RS232_fifo is
                     contents_fifo(to_integer(write_ptr)) <= DIN;
                     write_ptr <= (write_ptr + 1) and "11"; -- write_ptr + 1 % 4
                     
-                    -- Modificar cuenta
+                    -- Modify count
                     if count = 4 then
                         count <= "100";
                     else 
@@ -95,11 +93,11 @@ architecture Fifo_Behaviour of RS232_fifo is
                     end if;
                 
                 elsif RD_EN = '1' and empty_s = '0' then 
-                    --Sacar 1 dato de la FIFO
+                    --Take a word from FIFO
                     DOUT <= contents_fifo(to_integer(read_ptr));
                     read_ptr <= (read_ptr + 1) and "11";
                     
-                    --Actualizar contadores
+                    --Update counter
                     if count = 0 then
                         count <= (others => '0');
                     else 

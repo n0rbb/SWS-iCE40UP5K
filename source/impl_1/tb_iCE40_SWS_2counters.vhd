@@ -9,7 +9,7 @@ end tb_iCE40_SWS_2counters;
 architecture Testbench of tb_iCE40_SWS_2counters is
     component iCE40_SWS is
         port(
-            --  CLK_SOURCE        : in std_logic; --Uncomment when simulating with external oscillator
+            CLK_SOURCE        : in std_logic; --Uncomment when simulating with external oscillator
 
             -- User button -- Reset
             BTN               : in std_logic;
@@ -20,7 +20,7 @@ architecture Testbench of tb_iCE40_SWS_2counters is
     
             
             -- Frequency input
-            FQ_IN             : in std_logic_vector(1 downto 0);
+            FQ_IN             : in std_logic_vector(1 downto 0)
         );
     end component;
 
@@ -33,7 +33,7 @@ architecture Testbench of tb_iCE40_SWS_2counters is
     signal td           : std_logic;
 	signal rd		   : std_logic;
 	--Frequency Mock
-	signal fq_mocks : std_logic_vecctor(1 downto 0);
+	signal fq_mock : std_logic_vector(1 downto 0);
 	
     constant clkperiod  : time := 83.33 ns; --12 MHz clock frequency
     constant signalperiod1 : time := 500 ns; --2 MHz mock signal frequency
@@ -43,14 +43,14 @@ architecture Testbench of tb_iCE40_SWS_2counters is
         -- Component mapping
         Sensor_UT : iCE40_SWS
             port map(
-                --CLK_SOURCE      => clk12mhz, --Uncomment when simulating with external oscillator
+                CLK_SOURCE      => clk12mhz, --Uncomment when simulating with external oscillator
                 BTN             => btn_signal,
                 
                 UART_RX         => rd,
                 UART_TX         => td,
 
                 --LED             => led_signal,
-                FQ_IN           => fq_mocks
+                FQ_IN           => fq_mock
             ); 
            
         -- Reset generation
@@ -185,5 +185,5 @@ architecture Testbench of tb_iCE40_SWS_2counters is
 				
         end process UART_Comm;
 		-- Signal-port assignation
-        btn_signal <= not(reset);
+        btn_signal <= reset;
 	end Testbench;

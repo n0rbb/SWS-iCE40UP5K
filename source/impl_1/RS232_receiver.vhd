@@ -1,7 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+-- Engineer: MARIO DE MIGUEL
 -- Create Date: 22.04.2025 09:19:45
 -- Design Name: 
 -- Module Name: RS232_receiver - Receiver_behavior
@@ -46,7 +44,7 @@ architecture Receiver_Behavior of RS232_receiver is
     signal halfbit_count    : unsigned(7 downto 0);       -- Contador para retardo al centro del bit inicial
     signal bit_count        : unsigned(7 downto 0);       -- Contador para retardo al centro de los bits de datos
     --Constants 
-    constant bit_width      : unsigned(7 downto 0) := to_unsigned(104, 8);   -- PerÃ­odo del bit para 115200 bps con reloj de 100 MHz
+    constant bit_width      : unsigned(7 downto 0) := to_unsigned(104, 8);   -- T del bit para 115200 bps con reloj de 100 MHz
 
     begin
         Receiver_FSM : process(current_state, halfbit_count, bit_count, data_count, RX_BIT)
@@ -68,7 +66,7 @@ architecture Receiver_Behavior of RS232_receiver is
                     when StartBit =>
                         --Output logic
                         if halfbit_count = bit_width/2 then 
-                            if RX_BIT <= '0' then --ComprobaciÃ³n de validez del bit
+                            if RX_BIT <= '0' then --Valid bit checking
                                 VALID_OUT <= '1';
                             else
                                 VALID_OUT <= '0';
@@ -110,7 +108,7 @@ architecture Receiver_Behavior of RS232_receiver is
                     when StopBit =>
                         VALID_OUT <= '0';
                         if bit_count = bit_width then 
-                            if RX_BIT <= '1' then --Comprobar que el bit de parada es 1, si no, a la porra
+                            if RX_BIT <= '1' then --Check that stop bit is 1
                                 STORE_OUT <= '1';
                             else
                                 STORE_OUT <= '0';
