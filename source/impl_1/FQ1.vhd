@@ -65,7 +65,7 @@ signal count_mid1_carry, count_mid2_carry, count_high_carry : unsigned(0 downto 
 signal elapsed_periods : unsigned(7 downto 0);
 
 signal count_clear_sync_r1, count_clear_sync_r2 : std_logic;
-signal count_clear_reg1, count_clear_reg2, count_clear_reg3 : std_logic; --3 Staged
+signal count_clear_reg1, count_clear_reg2, count_clear_reg3, count_clear_reg4 : std_logic; --4 Staged
 signal count_enable_sync_r1, count_enable_sync_r2 : std_logic;
 
 signal count_read_sync_r1, count_read_sync_r2 : std_logic;
@@ -85,6 +85,9 @@ attribute dont_touch of count_high : signal is "true";
 attribute dont_touch of count_mid2 : signal is "true";
 attribute dont_touch of count_mid1 : signal is "true";
 attribute dont_touch of count_low  : signal is "true";
+
+attribute syn_hier : string;
+attribute syn_hier of Count_Me_Up : architecture is "soft";
 
 --attribute dont_touch of busy_flag_reg1 : signal is "true";
 --attribute dont_touch of busy_flag_reg2 : signal is "true";
@@ -223,12 +226,17 @@ begin
 				count_read_sync_r1 <= '0';
 				count_read_sync_r2 <= '0';
 				
+				count_clear_reg1 <= '0';
+				count_clear_reg2 <= '0';
+				count_clear_reg3 <= '0';
+				count_clear_reg4 <= '0';
+				
 				target_reached <= '0';
 				target_reached_h1 <= '0';
 				target_reached_h2 <= '0';
 				
 			elsif FAST_CLK_PORT'event and FAST_CLK_PORT = '1' then
-				if count_clear_sync_r2 = '1' then
+				if count_clear_reg1 = '1' then
 					--count_sg <= (others => '0');
 					count_low <= (others => '0');
 					count_low_done <= '0';
@@ -236,20 +244,20 @@ begin
 					
 				end if;	
 				
-				if count_clear_reg1 = '1' then
+				if count_clear_reg2 = '1' then
 					count_mid1 <= (others => '0');
 					count_mid1_done <= '0';
 					count_mid2_carry <= "0";
 					
 				end if;	
 				
-				if count_clear_reg2 = '1' then
+				if count_clear_reg3 = '1' then
 					count_mid2 <= (others => '0');
 					count_mid2_done <= '0';
 					count_high_carry <= "0";
 				end if;
 				
-				if count_clear_reg3 = '1' then
+				if count_clear_reg4 = '1' then
 					count_high <= (others => '0');
 					
 					target_reached <= '0';
@@ -299,8 +307,7 @@ begin
 				if busy_flag_reg4 = '1' then
 					
 					count_high <= count_high + count_high_carry; --Update high_counter
-					
-				-- Target checking management
+									 --Target checking management
 					if elapsed_periods(3 downto 0) > target_reg(3 downto 0) then
 						target_reached_h1 <= '1';
 					else
@@ -315,6 +322,7 @@ begin
 					
 					if target_reached_h1 = '1' and target_reached_h2 = '1' then
 						target_reached <= '1';
+						
 					else
 						target_reached <= '0';
 					end if;
@@ -339,6 +347,7 @@ begin
 				count_clear_reg1 <= count_clear_sync_r2;
 				count_clear_reg2 <= count_clear_reg1;
 				count_clear_reg3 <= count_clear_reg2;
+				count_clear_reg4 <= count_clear_reg3;
 				
 				count_read_sync_r1 <= COUNTER_READ;
 				count_read_sync_r2 <= count_read_sync_r1;
