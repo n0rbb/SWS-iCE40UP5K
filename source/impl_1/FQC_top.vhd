@@ -50,7 +50,8 @@ end FQC_top;
 
 
 architecture FQC_Behavior of FQC_top is
-	
+	--attribute syn_hier : string;
+	--attribute syn_hier of FQC_Behavior : architecture is "fixed";
 	component FQCLK is --PLL for the counters
 		port(
 			ref_clk_i: in std_logic;
@@ -173,7 +174,7 @@ architecture FQC_Behavior of FQC_top is
 		COUNT_RDY <= count_ready;
 		
 		--ANDs to operate ONLY the armed counters
-		count_clear1 <= count_clear and fqc_regs(1)(0) and counter_sel_r(0); --AÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±adir counter_selected para no resetear indebidamente los otros contadores
+		count_clear1 <= count_clear and fqc_regs(1)(0) and counter_sel_r(0); --AÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±adir counter_selected para no resetear indebidamente los otros contadores
 		count_enable1 <= count_enable and fqc_regs(1)(0);
 		
 		count_clear2 <= count_clear and fqc_regs(1)(1) and counter_sel_r(1);
@@ -296,9 +297,9 @@ architecture FQC_Behavior of FQC_top is
 						end if;
 						
 						-- Read selection mux
-							if counter_ready1 = '1' then
+							if counter_ready1 = '1' and count_ready <= '0' then
 								counter_sel_r <= X"01";
-							elsif counter_ready2 = '1' and counter_ready1 = '0' then
+							elsif counter_ready2 = '1' and counter_ready1 = '0' and count_ready <= '0' then
 								counter_sel_r <= X"02";
 							end if;
 						
